@@ -1,8 +1,10 @@
 # pyCollab
 
-# How to run:
-  git clone 
-  cd src
-  pipenv install
-  python manage.py runserver
+## About
+
+## How to run:
+    git clone 
+    cd src
+    pipenv install
+    python manage.py runserver
   
