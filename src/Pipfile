@@ -9,6 +9,8 @@ verify_ssl = true
 channels = "*"
 docker = "*"
 channels-redis = "*"
+uuid = "*"
+logging = "*"
 
 [requires]
 python_version = "3.7"

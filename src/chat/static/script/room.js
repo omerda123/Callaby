@@ -1,25 +1,4 @@
-<!-- chat/templates/chat/room.html -->
-{% load static %}
-
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8" />
-    <title>Chat Room</title>
-    <link rel="stylesheet" href="{% static 'style/style.css' %}">
-</head>
-
-<body>
-    <div id="chat-box">
-        <ul id="chat-list">
-        </ul>
-    </div>
-    <input id="chat-message-input" type="text" size="100" /><br />
-    <input id="chat-message-submit" type="button" value="Send" />
-    <div class="number">test</div>
-    <script>
-        var roomName = "{{ room_name|escapejs }}";
+var roomName = "{{ room_name|escapejs }}";
 let numOfParticipants = 0
 var chatSocket = new WebSocket(
     'ws://' + window.location.host +
@@ -36,7 +15,7 @@ chatSocket.onmessage = function (e) {
     var message = data['message'];
     chatList = document.querySelector("#chat-list")
     li = document.createElement("li")
-    li.innerHTML =  `{{ user_name}} : ${message}`
+    li.innerHTML = message
     chatList.appendChild(li)
 };
 
@@ -61,9 +40,3 @@ document.querySelector('#chat-message-submit').onclick = function (e) {
 
     messageInputDom.value = '';
 };
-
-    </script>
-</body>
-
-
-</html>
