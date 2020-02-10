@@ -42,7 +42,7 @@
             var message = data['message'];
             chatList = document.querySelector("#chat-list")
             li = document.createElement("li")
-            li.innerHTML = `{{ user_name}} : ${message}`
+            li.innerHTML = `{{ user_name }} : ${message}`
             chatList.appendChild(li)
         };
 
@@ -62,7 +62,9 @@
             var messageInputDom = document.querySelector('#chat-message-input');
             var message = messageInputDom.value;
             chatSocket.send(JSON.stringify({
-                'message': message
+                'message': message, 
+                'author': "{{ user_name }}",
+                'chat_id': "{{ room_name|escapejs }}"
             }));
 
             messageInputDom.value = '';
