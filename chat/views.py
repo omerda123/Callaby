@@ -4,7 +4,7 @@ import uuid
 def index(request):
     chat_room = str(uuid.uuid4().hex)
     print(chat_room)
-    return redirect(f'/chat/{chat_room}')
+    return redirect(f'/chat/unknown/{chat_room}')
 
 
 def room(request, user_name = "unknown", room_name = "empty_room"):
