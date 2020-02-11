@@ -1,10 +1,10 @@
-# chat/consumers.py
-from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 import logging
-from . import models
-from asgiref.sync import sync_to_async
+
 from channels.db import database_sync_to_async
+from channels.generic.websocket import AsyncWebsocketConsumer
+
+from . import models
 
 logging.basicConfig(
     format='[%(levelname)s %(asctime)s %(module)s:%(lineno)d] %(message)s', level=logging.INFO)
@@ -34,13 +34,20 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     # Receive message from WebSocket
+
+    @database_sync_to_async
+    def save_chat(self, chat_id, author, message):
+        logger.info(f"Creating message chat#{chat_id} by {author}: {message!r}")
+        models.Message.objects.create(
+            author=author,
+            content=message,
+            chat_id=chat_id,
+        )
+
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-        #
-        # await (database_sync_to_async(models.Message.objects.create(author=text_data_json['author'], content=text_data_json['message'],
-        #                                       chat_id=text_data_json['chat_id'])))
-
+        await self.save_chat(**text_data_json)
         await self.channel_layer.group_send(
             self.room_group_name,
             {
