@@ -9,5 +9,6 @@ from django.shortcuts import redirect
 urlpatterns = [
     path('chat/', include('chat.urls')),
     path('', include('chat.urls')),
+    path('api/', include('api.urls')),
     path('admin/', admin.site.urls),
 ]
