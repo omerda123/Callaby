@@ -5,12 +5,16 @@ import Chat from './Chat'
 import Carusel from './Carousel'
 
 export default function AgentHome(props) {
+
+    function foo (){
+        return fetch('/api/users/')
+    }
     return (
         <div className="agent-home">
             <div className="left">
                 <AgentStatus></AgentStatus>
                 <Details></Details>
-                
+                <button onClick={foo}> foo</button>
             </div>
             <div className="center">
                 <Chat></Chat>

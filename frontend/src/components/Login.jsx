@@ -3,6 +3,7 @@ import DjangoCSRFToken from 'django-react-csrftoken'
 
 
 export default function Login(props) {
+    
     return (
         <div className="login-wrapper">
             <div className="login-form">
@@ -14,7 +15,7 @@ export default function Login(props) {
                 {/* <DjangoCSRFToken/> */}
                 <div><input type="text" name="username" id="username" placeholder="Username"/></div>
                 <div><input type="password" name="password" id="password" placeholder="Password"/></div>
-                <div> <button className="login-submit" type="submit"> Submit</button></div>
+                <div> <button className="login-submit" onClick={props.to}> Submit</button></div>
                 {/* </form> */}
         </div>
         </div>
