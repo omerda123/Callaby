@@ -11,6 +11,9 @@ channels-redis = "*"
 ipython = "*"
 django-extensions = "*"
 psycopg2 = "*"
+djangorestframework = "*"
+markdown = "*"
+django-filter = "*"
 
 [requires]
 python_version = "3.7"
