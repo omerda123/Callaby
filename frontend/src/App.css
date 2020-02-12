@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+#root{
+  height: 100vh;
+}
+.container{
+  width:100vw;
+  height: 100vh;
+  background: -moz-linear-gradient(-45deg, #183850 0, #183850 25%, #192C46 50%, #22254C 75%, #22254C 100%);
+	background: -webkit-linear-gradient(-45deg, #183850 0, #183850 25%, #192C46 50%, #22254C 75%, #22254C 100%);
+}
+
+.agent-home{
+  display: flex;
+  height: 100vh;
+}
+
+.agent-avatar{
+  border-radius: 50%;
+  width: 89px;
+  height: 80px;
+  margin-right: 20px;
+
+}
+
+.right,.left{
+  width:20%;
+  padding: 20px;
+  min-width: 250px;
+}
+.center{
+  width:60%
+}
+
+.agent-area , .details{
+  display: flex;
+  margin-bottom: 20px;
+  color:#20254C;
+  background-color: white;
+  border-radius: 10px;
+  font-size: 18px;
+  border: 1px solid black;
+}
+
+.agent-name{
+  font-weight: bold;
+}
+
+.chat-bubble{
+  display: flex;
+  justify-content: start;
+  padding-left: 10px;
+  align-items: center;
+  position: absolute;
+  top: 20px;
+  width: 300px;
+  height: 50px;
+  background-color:  rgba(25,147,147,0.2);
+  color: aqua;
+  border-radius: 20px;
+}
+.status-bubble{
+  width: 10px;
+  height: 10px;
+  background-color: green;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 5px;
+}
+.agent-details{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-image{
+  width:100px;
+  height: 100px;
+  margin-right: 20px;
+}
+
+.product{
+  display: flex;
+  color:white;
+}
+
+.left{
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-input{
+  width:100%;
+  height: 20px;
+  font-size: 20px;
+  color: aqua;
+  position: relative;
+  border: 0;
+  border-bottom: 2px solid aqua;
+  background-color: transparent;
+}
+
+.chat-input:focus{
+  outline: none;
+}
+
+.chat-box{
+  height: 95vh;
+}
+
+.details{
+  display: flex;
+  flex-direction: column;
+  /* justify-content: ; */
+  align-items: flex-start;
+}
+
+.details-item{
+  display: flex;
+  justify-content: space-around;
+
+}
+
+.login-wrapper{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-form{
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 400px;
+  height: 400px;
+  background-color: white;
+  color:#20254C;
+  border-radius: 5px;
+  -webkit-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 2px 2px 5px 0px rgba(0,0,0,0.75);
+}
+
+.login-submit{
+  width: 300px;
+  height: 30px;
+  background-color: #20254C;
+  font-family: 'Open Sans', sans-serif;
+  color: white;
+  border-radius: 5px;
+  border: 0;
+  font-size: 16px;
+  font-weight: 15px;
+}
+
+.login-logo{
+  display: flex;
+  position: absolute;
+  transform: translate(50%,-50%);
+  justify-content: center;
+  align-items: center;
+  top:0;
+  right: 50%;
+  border-radius: 50%;
+  width:150px;
+  height: 150px;
+  background-color: #20254C;
+  border: 1px solid rgb(53, 60, 114);
+  color:white
+}
+
+.login-form div{
+  margin-bottom: 20px;
+}
+
+.login-form input{
+  width: 300px;
+  height: 30px;
+  font-size: 15px;
+  color: #20254C;
+  border: 1px solid rgb(53, 60, 114);
+}
+
+#username{
+  background: url(https://image.flaticon.com/icons/png/512/44/44948.png) no-repeat scroll 7px 7px;
+  background-size: 15px;
+  background-position: 270px;
+  left:0;
+  /* padding-left:30px; */
+}
+#password{
+  background: url(https://cdn1.iconfinder.com/data/icons/ios-11-glyphs/30/password-512.png) no-repeat scroll 7px 7px;
+  background-size: 17px;
+  background-position: 270px;
+  left:0;
+  /* padding-left:30px; */
+}
+
+.carousel{
+  text-align: center;
+  color:white;
+}
+
