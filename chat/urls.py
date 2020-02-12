@@ -8,5 +8,5 @@ from . import models
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('<str:user_name>/<str:room_name>/', views.room, name='room'),
+    path('chat/<str:user_name>/<str:room_name>/', views.room, name='room'),
 ]

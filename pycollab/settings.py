@@ -47,6 +47,8 @@ REST_FRAMEWORK = {
 }
 
 ROOT_URLCONF = 'pycollab.urls'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 TEMPLATES = [
     {

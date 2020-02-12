@@ -7,10 +7,9 @@ import Admin from './components/admin/AdminHome'
 
 export default class App extends Component {
   state = {
-    loggedIn: false,
+    loggedIn: true,
     products: products,
-    role: 1,
-    stam:1,
+    role: 2,
   }
 
   toggleLogin() {

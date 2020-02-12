@@ -7,8 +7,8 @@ from django.shortcuts import redirect
 #     return redirect('chat/')
 
 urlpatterns = [
-    path('chat/', include('chat.urls')),
     path('', include('chat.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
     path('api/', include('api.urls')),
     path('admin/', admin.site.urls),
 ]

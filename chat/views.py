@@ -1,12 +1,10 @@
 from django.shortcuts import render, redirect
 import uuid
+from django.contrib.auth.decorators import login_required
 
 
-
+@login_required
 def index(request):
-    # chat_room = str(uuid.uuid4().hex)
-    # print(chat_room)
-    # return redirect(f'/chat/unknown/{chat_room}')
     return render(request, 'chat/index.html')
 
 
