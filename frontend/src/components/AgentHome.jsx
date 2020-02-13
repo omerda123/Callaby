@@ -5,6 +5,9 @@ import Chat from './Chat'
 import Carusel from './Carousel'
 
 export default function AgentHome(props) {
+    function logout(){
+        return fetch('/api/account/logout/')
+    }
 
     function foo (){
         return fetch('/api/users/')
@@ -20,6 +23,7 @@ export default function AgentHome(props) {
                 <Chat></Chat>
             </div>
             <div className="right">
+                <a href = "/accounts/logout/">logout</a>
             <Carusel products={props.products}/>
      
             </div>

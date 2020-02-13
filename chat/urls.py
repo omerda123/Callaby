@@ -4,9 +4,10 @@ from django.http import HttpResponse
 from . import views
 from . import models
 
-
+app_name = "chat"
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('chat/<str:user_name>/<str:room_name>/', views.room, name='room'),
+    path('', views.Login.as_view(), name='login'),
+    path('chat/', views.index , name='index'),
+    path('django-chat/', views.chat, name='room'),
 ]

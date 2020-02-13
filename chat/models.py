@@ -33,3 +33,8 @@ class Chat(models.Model):
     originator = models.CharField(max_length=200)
     destination = models.CharField(max_length=200)
     chat_id = models.CharField(max_length=200)
+
+class Product(models.Model):
+    enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
+    name = models.CharField(max_length=200)
+    price = models.IntegerField()
