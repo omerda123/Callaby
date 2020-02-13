@@ -22,12 +22,14 @@ export default class Chat extends Component {
             'author': "{{ user_name }}",
             'chat_id': "{{ room_name|escapejs }}"
         }));
+    };
+
+    handleKeyDown = (e) =>{
+        if (e.key === 'Enter') {
+            this.sendMessage(e);
+            document.querySelector('#chat-message-input').value ='';
+          }
     }
-
-
-
-
-
 
     componentDidMount() {
         this.chatSocket.onopen = (e) => {
@@ -37,8 +39,13 @@ export default class Chat extends Component {
         this.chatSocket.onmessage = (e) => {
             const data = JSON.parse(e.data);
             const message = data['message'];
-            this.state.chatMessages.push(message)
+            console.log(message)
+            let arrMSG = [...this.state.chatMessages]
+            arrMSG.push(message)
+            this.setState({chatMessages: arrMSG})
         };
+
+
     }
     componentWillUnmount() {
         this.chatSocket.onclose = function (e) {
@@ -57,10 +64,7 @@ export default class Chat extends Component {
 
                 </div>
                 <div>
-                    <form>
-                        <input type="text" className="chat-input" id="chat-message-input" />
-                        <button id="chat-message-submit" type="button" value="Send" onClick={this.sendMessage}> send</button>
-                    </form>
+                        <input type="text" className="chat-input" id="chat-message-input" onKeyDown={this.handleKeyDown}/>
                 </div>
             </div>
         )
