@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
-from tutorial.quickstart.serializers import UserSerializer, GroupSerializer
+from .serializers import UserSerializer, GroupSerializer
+from chat.models import Product
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -17,3 +18,7 @@ class GroupViewSet(viewsets.ModelViewSet):
     """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
+
+# class GetAllProducts(viewsets.ModelViewSet):
+#     qs = Product.objects.all()
+#     serializer_class = ProductSerializer
