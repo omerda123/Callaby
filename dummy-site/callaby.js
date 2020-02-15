@@ -6,7 +6,7 @@ const sendMessage = (e)=>{
             'message': message, 
             'agent': 'no_agent',
             'customer': 'customer1',
-            'chat_id': '123'
+            'chat_id': '1234'
     }));
     chatInput.value = '';
     }
