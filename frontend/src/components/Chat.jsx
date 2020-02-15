@@ -8,27 +8,30 @@ export default class Chat extends Component {
         this.props = props;
         this.state = {
             chatMessages: [],
+            roomName: 'room1',
+            chat_input:''
         };
-
         this.roomName = 'chat1';
-        this.chatSocket = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${this.roomName}/`);
+        this.chatSocket = new WebSocket(`${this.props.ws_url}${this.state.roomName}/`);
     }
 
 
     sendMessage = (e) => {
-        const message = document.querySelector('#chat-message-input').value;
         this.chatSocket.send(JSON.stringify({
-            'message': message,
+            'message': this.state.chat_input,
             'author': "{{ user_name }}",
             'chat_id': "{{ room_name|escapejs }}"
         }));
     };
 
     handleKeyDown = (e) =>{
+        console.log(e.target.value);  
+        this.setState({chat_input:e.target.value })  
         if (e.key === 'Enter') {
             this.sendMessage(e);
             document.querySelector('#chat-message-input').value ='';
-          }
+            this.setState({chat_input:''})
+        }
     }
 
     componentDidMount() {
@@ -48,9 +51,8 @@ export default class Chat extends Component {
 
     }
     componentWillUnmount() {
-        this.chatSocket.onclose = function (e) {
-            console.error('Chat socket closed unexpectedly');
-        };
+        this.chatSocket.close();
+        this.chatSocket = null
     }
 
 
@@ -64,7 +66,7 @@ export default class Chat extends Component {
 
                 </div>
                 <div>
-                        <input type="text" className="chat-input" id="chat-message-input" onKeyDown={this.handleKeyDown}/>
+                        <input type="text" className="chat-input" id="chat-message-input" onKeyUp={this.handleKeyDown}/>
                 </div>
             </div>
         )

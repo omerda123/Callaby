@@ -1,32 +1,25 @@
-import React from 'react'
-import AgentStatus from './AgentStatus'
-import Details from './Details'
-import Chat from './Chat'
-import Carusel from './Carousel'
+import React from 'react';
+import AgentStatus from './AgentStatus';
+import Details from './Details';
+import Chat from './Chat';
+import Carusel from './Carousel';
+
 
 export default function AgentHome(props) {
-    function logout(){
-        return fetch('/api/account/logout/')
-    }
-
-    function foo (){
-        return fetch('/api/users/')
-    }
     return (
         <div className="agent-home">
             <div className="left">
-                <AgentStatus></AgentStatus>
-                <Details></Details>
-                <button onClick={foo}> foo</button>
+                <AgentStatus user={props.user} />
+                <Details />
             </div>
             <div className="center">
-                <Chat></Chat>
+                <Chat ws_url={props.ws_url} />
             </div>
             <div className="right">
-                <a href = "/accounts/logout/">logout</a>
-            <Carusel products={props.products}/>
-     
+                <a href="/accounts/logout/">logout</a>
+                <Carusel products={props.products} />
+
             </div>
         </div>
-    )
+    );
 }

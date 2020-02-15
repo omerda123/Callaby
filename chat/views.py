@@ -11,7 +11,7 @@ class Login(LoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            return redirect(reverse('chat:room'))
+            return redirect(reverse('chat:index'))
         return super().dispatch(request, *args, **kwargs)
 
 
