@@ -3,6 +3,8 @@ import logging
 
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
+from channels.auth import login
+from django.contrib.auth.models import User
 
 from . import models
 
@@ -18,6 +20,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
+        self.user = self.scope["user"]
+        # await login(self.scope, self.user)
+        logger.info(f"userrrr: {self.user}")
         logger.info(f"> Start chat #{self.room_group_name}")
 
         # Join room group
@@ -49,25 +54,19 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def receive(self, text_data):
+
         text_data_json = json.loads(text_data)
         agent = text_data_json['agent']
         message = text_data_json['message']
         print(message)
-        if message == 'init':
-            logged_in_agents.append(agent)
-            logger.info(logged_in_agents)
-        elif message == 'close':
-            logged_in_agents.remove(agent)
-            logger.info(logged_in_agents)
-        else:
-            # await self.save_chat(**text_data_json)
-            await self.channel_layer.group_send(
-                self.room_group_name,
-                {
-                    'type': 'chat_message',
-                    'message': message
-                }
-            )
+        await self.save_chat(**text_data_json)
+        await self.channel_layer.group_send(
+            self.room_group_name,
+            {
+                'type': 'chat_message',
+                'message': message
+            }
+        )
 
     # Receive message from room group
     async def chat_message(self, event):

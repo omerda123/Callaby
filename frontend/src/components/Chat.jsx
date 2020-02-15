@@ -37,12 +37,6 @@ export default class Chat extends Component {
 
     componentDidMount() {
         this.chatSocket.onopen = (e) => {
-            this.chatSocket.send(JSON.stringify({
-                'message': 'init',
-                'agent':'Omer Daniel',
-                'customer': 'unknown_customer',
-                'chat_id': "{{ room_name|escapejs }}"
-            }));
             console.log(e);
         }
 
