@@ -19,7 +19,8 @@ export default class Chat extends Component {
     sendMessage = (e) => {
         this.chatSocket.send(JSON.stringify({
             'message': this.state.chat_input,
-            'author': "{{ user_name }}",
+            'agent':'Omer Daniel',
+            'customer': 'unknown_customer',
             'chat_id': "{{ room_name|escapejs }}"
         }));
     };
@@ -36,6 +37,12 @@ export default class Chat extends Component {
 
     componentDidMount() {
         this.chatSocket.onopen = (e) => {
+            this.chatSocket.send(JSON.stringify({
+                'message': 'init',
+                'agent':'Omer Daniel',
+                'customer': 'unknown_customer',
+                'chat_id': "{{ room_name|escapejs }}"
+            }));
             console.log(e);
         }
 
@@ -51,6 +58,12 @@ export default class Chat extends Component {
 
     }
     componentWillUnmount() {
+        this.chatSocket.send(JSON.stringify({
+            'message': 'close',
+            'agent':'Omer Daniel',
+            'customer': 'unknown_customer',
+            'chat_id': "{{ room_name|escapejs }}"
+        }));
         this.chatSocket.close();
         this.chatSocket = null
     }

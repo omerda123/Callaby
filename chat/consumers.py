@@ -11,6 +11,8 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+logged_in_agents = []
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -28,6 +30,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def disconnect(self, close_code):
         # Leave room group
+
         await self.channel_layer.group_discard(
             self.room_group_name,
             self.channel_name
@@ -36,26 +39,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Receive message from WebSocket
 
     @database_sync_to_async
-    def save_chat(self, chat_id, author, message):
-        logger.info(f"Creating message chat#{chat_id} by {author}: {message!r}")
+    def save_chat(self, chat_id, agent, customer, message):
+        logger.info(f"Creating message chat#{chat_id} by {agent}: {message!r}")
         models.Message.objects.create(
-            author=author,
-            content=message,
             chat_id=chat_id,
+            agent=agent,
+            customer=customer,
+            content=message,
         )
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
+        agent = text_data_json['agent']
         message = text_data_json['message']
         print(message)
-        await self.save_chat(**text_data_json)
-        await self.channel_layer.group_send(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message
-            }
-        )
+        if message == 'init':
+            logged_in_agents.append(agent)
+            logger.info(logged_in_agents)
+        elif message == 'close':
+            logged_in_agents.remove(agent)
+            logger.info(logged_in_agents)
+        else:
+            # await self.save_chat(**text_data_json)
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    'type': 'chat_message',
+                    'message': message
+                }
+            )
 
     # Receive message from room group
     async def chat_message(self, event):
