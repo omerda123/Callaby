@@ -9,71 +9,109 @@ export default class Chat extends Component {
         this.state = {
             chatMessages: [],
             roomName: 'room1',
-            chat_input:''
+            chatInput:''
         };
         this.roomName = 'chat1';
         this.chatSocket = new WebSocket(`${this.props.ws_url}${this.state.roomName}/`);
+        this.mesRef = React.createRef();
     }
 
+    componentDidUpdate(){
+        this.scrollToBottom()
+        
+    }
 
-    sendMessage = (e) => {
-        this.chatSocket.send(JSON.stringify({
-            'message': this.state.chat_input,
+    scrollToBottom = () => {
+        this.messageEnd.scrollIntoView({ behavior: 'smooth' })
+      }
+
+
+    sendMessage = () => {
+        const msg = {
+            'message': this.state.chatInput,
             'agent':'Omer Daniel',
             'customer': 'unknown_customer',
             'chat_id': "{{ room_name|escapejs }}"
-        }));
+        }
+        this.setState((state)=>{
+
+            return {
+                chatMessages: [...state.chatMessages, msg],
+                chatInput: ''
+            }
+        } ,() => this.scrollToBottom()
+        )
+        this.chatSocket.send(JSON.stringify(msg));
+
     };
 
-    handleKeyDown = (e) =>{
-        console.log(e.target.value);  
-        this.setState({chat_input:e.target.value })  
+    handleKeyUp = (e) =>{
         if (e.key === 'Enter') {
-            this.sendMessage(e);
-            document.querySelector('#chat-message-input').value ='';
-            this.setState({chat_input:''})
+            this.sendMessage();
         }
     }
 
+    handleChange = (e) =>{
+        this.setState({chatInput:e.target.value })      
+    }
+
+
     componentDidMount() {
+        fetch('/api/messages/')
+        .then((chatMessages) => chatMessages.json())
+        .then(chatMessages => chatMessages = chatMessages['results'])
+        .then((chatMessages) => this.setState({ chatMessages }));
+        this.scrollToBottom()
+
         this.chatSocket.onopen = (e) => {
-            console.log(e);
+            //console.log(e);
         }
+
 
         this.chatSocket.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            const message = data['message'];
-            console.log(message)
-            let arrMSG = [...this.state.chatMessages]
-            arrMSG.push(message)
-            this.setState({chatMessages: arrMSG})
+
+            this.setState((state)=>{
+    
+                return {
+                    chatMessages: [...state.chatMessages, data],
+                }
+            })
+
+            // console.log(message)
+            // let arrMSG = [...this.state.chatMessages]
+            // arrMSG.push(message)
+            // this.setState({chatMessages: arrMSG})
         };
 
 
     }
     componentWillUnmount() {
+        this.chatSocket.close();
+        this.chatSocket = null
+
         this.chatSocket.send(JSON.stringify({
             'message': 'close',
             'agent':'Omer Daniel',
             'customer': 'unknown_customer',
             'chat_id': "{{ room_name|escapejs }}"
         }));
-        this.chatSocket.close();
-        this.chatSocket = null
+
     }
 
 
     render() {
         return (
             <div>
-                <div className="chat-box">
-                    {this.state.chatMessages.map((message) => {
-                        return(<Message content={message} author="sender" />)
+                <div className="chat-box" >
+                    {this.state.chatMessages.map((message,i) => {
+                        return(<Message key={i} content={message.message} author="sender" />)
                     })}
 
+                <div className="dummy" ref={(el) => {this.messageEnd= el;}}></div>
                 </div>
                 <div>
-                        <input type="text" className="chat-input" id="chat-message-input" onKeyUp={this.handleKeyDown}/>
+                        <input type="text" autoComplete="off" className="chat-input" value={this.state.chatInput} id="chat-message-input" onChange={this.handleChange} onKeyUp={this.handleKeyUp}/>
                 </div>
             </div>
         )

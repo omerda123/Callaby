@@ -16,7 +16,7 @@ export default class App extends Component {
             user: null,
         };
 
-        this.wsUrl = 'ws://127.0.0.1:8000/ws/chat/';
+        this.wsUrl = 'ws://localhost:8000/ws/chat/';
     }
 
 
