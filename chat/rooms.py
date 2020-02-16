@@ -1,4 +1,10 @@
+import logging
+
 MAX_SESSIONS_PER_AGENT = 4
+
+logging.basicConfig(
+    format='[%(levelname)s %(asctime)s %(module)s:%(lineno)d] %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class Rooms:
@@ -11,6 +17,7 @@ class Rooms:
     def agent_connect(self, agent):
         self.logged_in_agents.append(agent)
         self._match()
+        logger.info(f"agent {agent} logged in")
 
     def agent_disconnect(self, agent):
         pass
@@ -18,6 +25,7 @@ class Rooms:
     def customer_connect(self, customer):
         self.customers_queue.append(customer)
         self._match()
+        logger.info(f"customer {customer} logged in")
 
     def customer_disconnect(self, customer):
         room = self._find_customer_room(customer)
@@ -26,13 +34,19 @@ class Rooms:
         self._match()
 
     def _match(self):
-        if len(self.logged_in_agents) == 0 or len(self.customers_queue):
+        logger.info('try to match customer to agent')
+        if len(self.logged_in_agents) == 0 or len(self.customers_queue) == 0:
+            logger.info(f'logged in agents:{self.logged_in_agents}')
+            logger.info(f'queued customers:{self.customers_queue}')
+            logger.info('no agents or no customers')
             return None
         for customer in self.customers_queue:
-            most_available_agent = min(self.logged_in_agents, key=lambda a: a.active_chats)
-            if most_available_agent.active_chats < MAX_SESSIONS_PER_AGENT:
+            most_available_agent = min(self.logged_in_agents, key=lambda a: a.adminuser.active_chats)
+            if most_available_agent.adminuser.active_chats < MAX_SESSIONS_PER_AGENT:
+                logger.info(f'found agent to customer!! : {most_available_agent}')
                 self._pair(customer, most_available_agent)
             else:
+                logger.info('logged in agent is not available')
                 return None
 
     def _pair(self, customer, agent):
@@ -46,5 +60,5 @@ class Rooms:
         return None
 
     def _delete_room(self, room_id):
-        self.rooms[room_id].agent.active_chats -= 1
+        self.rooms[room_id].agent.adminuser.active_chats -= 1
         del self.rooms[room_id]

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Message(models.Model):
@@ -18,8 +19,8 @@ class Enterprise(models.Model):
 
 
 class AdminUser(models.Model):
-    username = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    active_chats = models.IntegerField(default=0)
     role = models.ForeignKey(Roles, on_delete=models.CASCADE)
     enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
 

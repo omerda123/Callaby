@@ -12,7 +12,7 @@ export default class Chat extends Component {
             chatInput:''
         };
         this.roomName = 'chat1';
-        this.chatSocket = new WebSocket(`${this.props.ws_url}${this.state.roomName}/`);
+        this.chatSocket = new WebSocket(`${this.props.ws_url}`);
         this.mesRef = React.createRef();
     }
 
@@ -64,7 +64,7 @@ export default class Chat extends Component {
         this.scrollToBottom()
 
         this.chatSocket.onopen = (e) => {
-            //console.log(e);
+            console.log(e);
         }
 
 

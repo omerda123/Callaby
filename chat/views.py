@@ -17,12 +17,8 @@ class Login(LoginView):
 
 @login_required(login_url="/")
 def chat(request):
-    user_name = "unknown"
-    room_name = "empty_room"
-    return render(request, 'chat/room.html', {
-        'user_name': user_name,
-        'room_name': room_name
-    })
+
+    return render(request, 'chat/room.html', {})
 
 
 @login_required(login_url="/")

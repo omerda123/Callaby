@@ -3,63 +3,36 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 import logging
 from . import models
-import channels_redis
-from channels.auth import login
+from . import rooms
 
 logging.basicConfig(
     format='[%(levelname)s %(asctime)s %(module)s:%(lineno)d] %(message)s', level=logging.INFO)
 
 logger = logging.getLogger(__name__)
 
-from . import rooms
-
-
 rooms = rooms.Rooms()
 
 
 class ChatConsumer(WebsocketConsumer):
+
     def connect(self):
-        logger.info(f"1 {self.scope['user']}, {self.channel_name!r}")
-        # agent login
-        async_to_sync(self.channel_layer.group_add)(
-            "xxx",
-            self.channel_name,
-        )
-
-        # customer login
-        # agent_channel_name = self.channel_layer.groups["xxx"].popitem()[0]
-        # print(agent_channel_name)
-
-        self.room_name = self.scope['url_route']['kwargs']['room_name']
-        self.room_group_name = 'chat_%s' % self.room_name
         self.user = self.scope['user']
-        # Join room group
-        async_to_sync(self.channel_layer.group_add)(
-            self.room_group_name,
-            self.channel_name,
-        )
-        self.accept()
         if self.user.id is None:
-            customers_queue.append(self.user)
+            rooms.customer_connect(self.user)
         else:
-            logged_in_agents.append(self.user)
-        logger.info(f'{self.user}')
-        logger.info(f"Logged in agents: {logged_in_agents}")
-        logger.info(f"Customers queue: {customers_queue}")
+            rooms.agent_connect(self.user)
+        self.accept()
 
     def disconnect(self, close_code):
         if self.user.id is None:
-            customers_queue.remove(self.user)
+            rooms.customer_disconnect(self.user)
         else:
-            logged_in_agents.remove(self.user)
-        logger.info(f"Logged in agents: {logged_in_agents}")
+            rooms.agent_disconnect(self.user)
 
-    # Receive message from WebSocket
     def receive(self, text_data):
-        # login(self.scope, user)
         text_data_json = json.loads(text_data)
-        logger.info(repr(text_data_json))
         message = text_data_json['message']
+
         models.Message.objects.create(
             chat_id=self.room_name,
             agent='agent_name',
