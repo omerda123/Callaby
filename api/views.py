@@ -1,25 +1,35 @@
 from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from .serializers import UserSerializer, GroupSerializer
-from chat.models import Product
+from rest_framework import viewsets, pagination
+from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer
+from chat import models
+
+
+class LargeResultsSetPagination(pagination.PageNumberPagination):
+    page_size = 1000
+    page_size_query_param = 'page_size'
+    max_page_size = 10000
+
+
+class StandardResultsSetPagination(pagination.PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
     queryset = User.objects.all().order_by('-date_joined')
-    # queryset = User.get_full_name()
     serializer_class = UserSerializer
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
 
-# class GetAllProducts(viewsets.ModelViewSet):
-#     qs = Product.objects.all()
-#     serializer_class = ProductSerializer
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = models.Message.objects.filter(chat_id='room1')
+    serializer_class = ChatMessageSerializer
+    pagination_class = LargeResultsSetPagination
+
+
+1
