@@ -5,7 +5,7 @@ class Message(models.Model):
     chat_id = models.CharField(max_length=200)
     agent = models.CharField(max_length=200)
     customer = models.CharField(max_length=200, null=True)
-    content = models.TextField()
+    message = models.TextField()
     timestamp = models.TimeField(auto_now=True)
 
 
