@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets, pagination
-from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer
+from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer , EnterpriseSerializer
 from chat import models
 
 
@@ -31,5 +31,9 @@ class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = ChatMessageSerializer
     pagination_class = LargeResultsSetPagination
 
+class EnterpriseViewSet(viewsets.ModelViewSet):
+    queryset = models.Enterprise.objects.all()
+    serializer_class = EnterpriseSerializer
 
-1
+
+

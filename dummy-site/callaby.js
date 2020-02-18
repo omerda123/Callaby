@@ -21,11 +21,9 @@ const toggleChat = () =>{
 } 
 
 
-const roomName = "room1";
-
 const chatSocket = new WebSocket(
     'ws://localhost:8000' +
-    '/ws/chat/' + roomName + '/');
+    '/ws/chat/' );
 
 chatSocket.onopen = function (e) {
     console.log(e)

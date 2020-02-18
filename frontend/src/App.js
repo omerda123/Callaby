@@ -5,24 +5,22 @@ import Login from './components/Login';
 import AgentHome from './components/AgentHome';
 import './App.css';
 import products from './Data/products.json';
-import Admin from './components/admin/AdminHome';
 
 
 export default class App extends Component {
     constructor() {
         super();
         this.state = {
-            role: 1,
             user: null,
+            role: 2,
         };
 
         this.wsUrl = 'ws://localhost:8000/ws/chat/';
     }
 
-
     // eslint-disable-next-line camelcase
     UNSAFE_componentWillMount() {
-        fetch('/api/users/')
+        fetch('/whoami/')
             .then((user) => user.json())
             .then((user) => this.setState({ user }));
     }
@@ -35,24 +33,7 @@ export default class App extends Component {
     render() {
         return (
             <div className="container">
-                {
-                    this.state.role === 1
-                        ? (
-                            <AgentHome
-                                products={products}
-                                user={this.state.user}
-                                ws_url={this.wsUrl}
-                            />
-                        )
-
-                        : <Admin role={this.state.role} />
-
-                }
-                {
-                    this.state.role === 4
-                        ? <Login toggleLogin={() => this.toggleLogin()} />
-                        : null
-                }
+                <AgentHome products={products} user={this.state.user} ws_url={this.wsUrl} />
             </div>
         );
     }

@@ -1,4 +1,5 @@
 import logging
+from . import consumers
 
 MAX_SESSIONS_PER_AGENT = 4
 
@@ -52,6 +53,7 @@ class Rooms:
     def _pair(self, customer, agent):
         self.room_id += 1
         room_id = self.room_id
+        # consumer.create_room(self, customer,agent, room_id)
 
     def _find_customer_room(self, customer):
         for room, participants in self.rooms.items():

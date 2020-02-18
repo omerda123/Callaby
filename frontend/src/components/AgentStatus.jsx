@@ -12,9 +12,9 @@ export default function AgentStatus(props) {
                         props.user
                             ? (
                                 <>
-                                    {props.user.results[0].first_name}
+                                    {props.user.first_name}
                                     {' '}
-                                    {props.user.results[0].last_name}
+                                    {props.user.last_name}
                                     {' '}
                                 </>
                             )

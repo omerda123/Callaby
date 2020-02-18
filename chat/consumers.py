@@ -15,6 +15,10 @@ rooms = rooms.Rooms()
 
 class ChatConsumer(WebsocketConsumer):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        logger.info(f"new consumer: {self.groups}")
+
     def connect(self):
         self.user = self.scope['user']
         if self.user.id is None:
@@ -32,7 +36,6 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
         models.Message.objects.create(
             chat_id=self.room_name,
             agent='agent_name',
@@ -58,3 +61,10 @@ class ChatConsumer(WebsocketConsumer):
             'custome    r': 'unknown_customer',
             'message': message,
         }))
+
+    def create_room(self, room_number, agent, customer):
+        self.room_name = room_number
+        async_to_sync(self.channel_layer.group_add)(
+            self.room_group_name,
+            self.channel_name
+        )
