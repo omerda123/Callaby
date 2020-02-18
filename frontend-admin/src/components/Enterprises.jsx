@@ -11,13 +11,14 @@ export default function Enterprises(props) {
         .then(res => setEnterprises( {enterprises: res.results }))
     } , [])
 
+
     return (
 
         <div>
             {
-                // JSON.stringify(enterprises)
+                // JSON.stringify(enterprises['enterprises'])
                 
-                JSON.parse(enterprises).map(el => <div> el.name </div>)
+                // JSON.parse(enterprises).map(enterprise => <div> enterprise.name </div>)
             }
             <div> 
                 <span> </span>
