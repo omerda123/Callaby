@@ -3,10 +3,8 @@ const sendMessage = (e)=>{
     if (e.code === 'Enter'){
         message = chatInput.value;        
         chatSocket.send(JSON.stringify({
-            'message': message, 
-            'agent': 'no_agent',
-            'customer': 'customer1',
-            'chat_id': '1234'
+            type: "message",
+            body: message
     }));
     chatInput.value = '';
     }

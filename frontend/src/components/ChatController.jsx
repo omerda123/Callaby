@@ -1,0 +1,78 @@
+import React, { Component } from 'react';
+import Chat from './Chat';
+import Tabs from './Tabs';
+
+const wsUrl = 'ws://localhost:8000/ws/chat/';
+
+
+export default class ChatController extends Component {
+    constructor(props) {
+        super(props);
+        this.chatSocket = new WebSocket(`${wsUrl}`);
+
+        this.state = {
+            chats: {
+                '200': ['chat100'],
+                '201': ['chat101'],
+            },
+            activeChat: '200',
+            chatInput: '',
+        };
+    }
+
+    toggleChat(e){
+        this.setState({activeChat: e.target.innerHTML})
+    }
+
+    handleChange(e) {
+        this.setState({ chatInput: e.target.value });
+    }
+
+    handleKeyUp = (e) =>{
+        if (e.key === 'Enter') {
+            console.log(this.state.chats[this.state.activeChat]);
+            this.state.chats[this.state.activeChat].push(this.state.chatInput);
+            this.setState({chatInput:''})
+        }
+
+    }
+    componentDidMount() {
+        this.chatSocket.onopen = (e) => {
+            console.log(e);
+        }
+
+        this.chatSocket.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            console.log(data);
+            if (data.type == "connect"){
+                const chats = {...this.state.chats}
+                chats[data.body.room_id] = []
+                this.setState({chats:chats})
+            }
+        }
+        
+    }
+    componentWillUnmount() {
+        this.chatSocket.close();
+        this.chatSocket = null
+        }
+    
+
+    render() {
+        const { chats } = this.state;
+        const {activeChat} = this.state;
+
+
+        return (
+            <>
+                <Tabs chats={Object.keys(chats)} toggleChat={(e)=> this.toggleChat(e)} />
+                <Chat 
+                    messages={chats[activeChat]} 
+                    handleChange={(e) => this.handleChange(e)} 
+                    handleKeyUp={this.handleKeyUp} 
+                    chatInput = {this.state.chatInput}
+                />
+            </>
+        );
+    }
+}

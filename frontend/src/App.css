@@ -105,7 +105,7 @@
 }
 
 .chat-box{
-  height: 95vh;
+  height: 90vh;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -220,4 +220,16 @@
 
 .reciever{
   right: 0;
+}
+
+.tabs{
+  display: flex;
+  justify-content: space-around;
+}
+
+.tab{
+  background-color: aqua;
+  border-radius: 5px;
+  padding:  1px 10px;
+  margin-top: 2px;
 }

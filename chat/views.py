@@ -1,3 +1,4 @@
+from django.contrib.auth import forms
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -5,8 +6,6 @@ from django.contrib.auth.views import LoginView
 from django.urls import reverse
 
 from api.serializers import UserSerializer
-from . import forms
-
 
 
 class Login(LoginView):

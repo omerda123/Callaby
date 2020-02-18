@@ -1,4 +1,7 @@
+import json
 import logging
+from asgiref.sync import async_to_sync
+
 from . import consumers
 
 MAX_SESSIONS_PER_AGENT = 4
@@ -20,8 +23,10 @@ class Rooms:
         self._match()
         logger.info(f"agent {agent} logged in")
 
+
     def agent_disconnect(self, agent):
-        pass
+        self.logged_in_agents.remove(agent)
+        logger.info(f"rooms: {self.rooms}")
 
     def customer_connect(self, customer):
         self.customers_queue.append(customer)
@@ -42,8 +47,8 @@ class Rooms:
             logger.info('no agents or no customers')
             return None
         for customer in self.customers_queue:
-            most_available_agent = min(self.logged_in_agents, key=lambda a: a.adminuser.active_chats)
-            if most_available_agent.adminuser.active_chats < MAX_SESSIONS_PER_AGENT:
+            most_available_agent = min(self.logged_in_agents, key=lambda a: a.user.adminuser.active_chats)
+            if most_available_agent.user.adminuser.active_chats < MAX_SESSIONS_PER_AGENT:
                 logger.info(f'found agent to customer!! : {most_available_agent}')
                 self._pair(customer, most_available_agent)
             else:
@@ -53,7 +58,15 @@ class Rooms:
     def _pair(self, customer, agent):
         self.room_id += 1
         room_id = self.room_id
-        # consumer.create_room(self, customer,agent, room_id)
+        message = {
+            'type': 'connect',
+            'body': {'room_id': room_id}
+        }
+        text_msg = json.dumps(message)
+        logger.info('send connect message to agent')
+        async_to_sync(customer.send(text_data=text_msg))
+        async_to_sync(agent.send(text_data=text_msg))
+
 
     def _find_customer_room(self, customer):
         for room, participants in self.rooms.items():
@@ -64,3 +77,7 @@ class Rooms:
     def _delete_room(self, room_id):
         self.rooms[room_id].agent.adminuser.active_chats -= 1
         del self.rooms[room_id]
+        message = {
+            'type': 'disconnect',
+            'body': {'room_id': room_id}
+        }

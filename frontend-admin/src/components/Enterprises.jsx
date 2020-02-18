@@ -3,26 +3,28 @@ import React, { useState, useEffect } from "react";
 
 export default function Enterprises(props) {
 
-    const [enterprises, setEnterprises] = useState({});
+    const [enterprises, setEnterprises] = useState({enterprises:[]});
+
+
+
+
 
     useEffect(() => {
         fetch("/api/enterprises/")
-        .then(res => res.json())
-        .then(res => setEnterprises( {enterprises: res.results }))
-    } , [])
+        .then(enterprises => enterprises.json())
+        .then(enterprises => enterprises.results)
+        .then(enterprises => setEnterprises( {enterprises }))
+        console.log((enterprises));
+        
+    } , [enterprises])
+    console.log((enterprises.enterprises));
 
 
     return (
 
         <div>
-            {
-                // JSON.stringify(enterprises['enterprises'])
-                
-                // JSON.parse(enterprises).map(enterprise => <div> enterprise.name </div>)
-            }
-            <div> 
-                <span> </span>
-            </div>
+
+                    {enterprises.enterprises.map(enterprise => <div className="table"> <span> {enterprise.id} </span> <span>{enterprise.name} </span></div>)}
         </div>
     )
 

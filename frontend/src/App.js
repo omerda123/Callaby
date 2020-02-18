@@ -15,7 +15,6 @@ export default class App extends Component {
             role: 2,
         };
 
-        this.wsUrl = 'ws://localhost:8000/ws/chat/';
     }
 
     // eslint-disable-next-line camelcase
