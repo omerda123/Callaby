@@ -28,10 +28,23 @@ export default class ChatController extends Component {
         this.setState({ chatInput: e.target.value });
     }
 
+    sendMessage ()  {
+        const msg = {
+                    'type': 'message',
+                    'body': {
+                        'message': this.state.chatInput,
+                        'room_id': this.state.activeChat
+                    }
+     }
+     this.chatSocket.send(JSON.stringify(msg));
+    }
+    
+
     handleKeyUp = (e) =>{
         if (e.key === 'Enter') {
             console.log(this.state.chats[this.state.activeChat]);
             this.state.chats[this.state.activeChat].push(this.state.chatInput);
+            this.sendMessage ()
             this.setState({chatInput:''})
         }
 
@@ -43,7 +56,7 @@ export default class ChatController extends Component {
 
         this.chatSocket.onmessage = (e) => {
             const data = JSON.parse(e.data);
-            console.log(data);
+            console.log(`data: ${data}`);
             if (data.type == "connect"){
                 const chats = {...this.state.chats}
                 chats[data.body.room_id] = []

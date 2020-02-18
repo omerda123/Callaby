@@ -35,25 +35,17 @@ class ChatConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        room_id = text_data_json['room_id']
-        #save to db
-        models.Message.objects.create(
-            chat_id=self.room_name,
-            agent='agent_name',
-            customer='customer',
-            message=message,
-        )
+        logger.info(text_data_json)
+        type = text_data_json['type']
+        if type == 'connect':
+            logger.info('--- connect ----')
+        elif type == 'message':
+            rooms.send_msg(text_data_json)
+            #save to db
+            # models.Message.objects.create(chat_id=self.room_name,agent='agent_name',customer='customer',message=message)
+        else:
+            logger.info('------- error --------')
 
 
-    # Receive message from room group
-    def chat_message(self, event):
-        message = event['message']
-        # Send message to WebSocket
-        self.send(text_data=json.dumps({
-            'agent': 'Omer Daniel',
-            'chat_id': "{{ room_name|escapejs }}",
-            'custome    r': 'unknown_customer',
-            'message': message,
-        }))
+
 

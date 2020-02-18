@@ -23,7 +23,6 @@ class Rooms:
         self._match()
         logger.info(f"agent {agent} logged in")
 
-
     def agent_disconnect(self, agent):
         self.logged_in_agents.remove(agent)
         logger.info(f"rooms: {self.rooms}")
@@ -58,6 +57,8 @@ class Rooms:
     def _pair(self, customer, agent):
         self.room_id += 1
         room_id = self.room_id
+        self.rooms[room_id] = [customer, agent]
+        logger.info(f" rooms : {self.rooms}")
         message = {
             'type': 'connect',
             'body': {'room_id': room_id}
@@ -66,7 +67,6 @@ class Rooms:
         logger.info('send connect message to agent')
         async_to_sync(customer.send(text_data=text_msg))
         async_to_sync(agent.send(text_data=text_msg))
-
 
     def _find_customer_room(self, customer):
         for room, participants in self.rooms.items():
@@ -81,3 +81,10 @@ class Rooms:
             'type': 'disconnect',
             'body': {'room_id': room_id}
         }
+
+    def send_msg(self, message):
+        logger.info(f"send message to customer {message}")
+        customer = self.rooms[int(message['body']['room_id'])][0]
+        logger.info(f'customer is {customer}!!!!')
+        text_msg = json.dumps(message)
+        async_to_sync(customer.send(text_data=text_msg))
