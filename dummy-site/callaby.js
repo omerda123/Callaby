@@ -13,6 +13,18 @@ const sendMessage = (e) => {
         chatInput.value = '';
     }
 }
+const sendName = (e) =>{
+    const message = nameInput.value;
+    window.chatSocket.send(JSON.stringify({
+        type: 'customer_name',
+        body: {
+            'name': message,
+        }
+    }));
+    nameDiv.classList.add('hidden')
+    chatDiv.classList.remove('hidden')
+    
+}
 
 const initSocket = ()=>{
     window.chatSocket = new WebSocket('ws://localhost:8000/ws/chat/')
@@ -62,14 +74,37 @@ button.innerHTML = "Consult us"
 
 const chat = document.createElement('div')
 chat.classList.add('chat', 'hidden');
-chat.innerHTML = "blabla"
 
 callaby.append(chat)
 callaby.appendChild(button)
 
+
 const chatBox = document.createElement('div')
 chat.appendChild(chatBox)
+chatBox.className = "chat-text"
 
 const chatInput = document.createElement('input')
 chatInput.addEventListener('keydown', sendMessage)
 chat.appendChild(chatInput)
+
+const chatDiv = document.createElement('div')
+chatDiv.appendChild(chatBox)
+chatDiv.appendChild(chatInput)
+chat.appendChild(chatDiv)
+chatDiv.classList.add('hidden')
+
+
+/*  <---------------- name form ---------------->  */
+
+const nameInput = document.createElement('input')
+const submitName = document.createElement('button')
+submitName.addEventListener('click', sendName);
+submitName.innerHTML = "submit"
+const nameLabel = document.createElement('p')
+nameLabel.innerHTML = "Please enter your name"
+const nameDiv = document.createElement('div')
+nameDiv.className = "name-form"
+chat.appendChild(nameDiv)
+nameDiv.appendChild(nameLabel)
+nameDiv.appendChild(nameInput)
+nameDiv.appendChild(submitName)

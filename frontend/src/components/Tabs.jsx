@@ -4,13 +4,14 @@ export default function Tabs(props) {
     const { chats } = props;
     const { toggleChat } = props;
     const { waitingMessages } = props;
+    const { customers } = props;
 
     return (
         <div className="tabs">
             {
                 chats.map((chat, i) => (
                     <div className="tab" key={i} id={chat} onClick={(e) => toggleChat(e)}>
-                        {chat}
+                        {customers[chat]}
                         {
                             waitingMessages[chat] === 0
                                 ? null

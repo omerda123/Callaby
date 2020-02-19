@@ -38,12 +38,14 @@ class ChatConsumer(WebsocketConsumer):
         type = text_data_json['type']
         if type == 'connect':
             logger.info('--- connect ----')
-        elif type== 'customer_message':
-            rooms.send_msg_to_agent(self,text_data_json)
+        elif type == 'customer_message':
+            rooms.send_msg_to_agent(self , text_data_json)
         elif type == 'message':
             rooms.send_msg_to_customer(text_data_json)
             #save to db
             # models.Message.objects.create(chat_id=self.room_name,agent='agent_name',customer='customer',message=message)
+        elif type == 'customer_name':
+            rooms.send_msg_to_agent(self,text_data_json)
         else:
             logger.info('------- error --------')
 

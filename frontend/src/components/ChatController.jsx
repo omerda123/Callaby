@@ -14,6 +14,7 @@ export default class ChatController extends Component {
             chats: {},
             waitingMessages: {},
             chatInput: '',
+            customers: {}
         };
     }
 
@@ -59,6 +60,7 @@ export default class ChatController extends Component {
             const chats = {...this.state.chats}
             const waitingMessages = {...this.state.waitingMessages}
             const room_id = parseInt(data.body.room_id);
+            const customers ={...this.state.customers}
             if (data.type === "connect"){
                 waitingMessages[data.body.room_id] = 0
                 chats[data.body.room_id] = []
@@ -66,15 +68,20 @@ export default class ChatController extends Component {
                 if (Object.keys(chats).length === 1)
                     this.setState({activeChat: room_id})
             }
-            if (data.type === "message"){
+            if (data.type === "customer_message"){
                 chats[room_id].push(data.body.message)
                 waitingMessages[room_id] +=1;
-                this.setState({chats:chats, waitingMessages})
+                this.setState({chats , waitingMessages})
             }
             if (data.type === "disconnect"){
                 delete chats[room_id]
                 delete waitingMessages[room_id]
+                delete customers[room_id]
                 this.setState({chats:chats})
+            }
+            if (data.type === "customer_name"){
+                customers[room_id] = data.body.name
+                this.setState({customers})
             }
         }
         
@@ -89,12 +96,13 @@ export default class ChatController extends Component {
         const { chats } = this.state;
         const {activeChat} = this.state;
         const {waitingMessages} = this.state;
-
+        const { customers } = this.state;
 
         return (
             <>
                 <Tabs 
                 chats={Object.keys(chats)} 
+                customers = {customers}
                 toggleChat={(e)=> this.toggleChat(e)} 
                 waitingMessages={waitingMessages} />
                 <Chat 

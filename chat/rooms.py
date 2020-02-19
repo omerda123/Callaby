@@ -94,8 +94,7 @@ class Rooms:
         if room_id in self.rooms.keys():
             customer = self.rooms[room_id][0]
             logger.info(f'customer is {customer}!!!!')
-            text_msg = json.dumps(message)
-            async_to_sync(customer.send(text_data=text_msg))
+            async_to_sync(customer.send(text_data=json.dumps(message)))
         else:
             logger.info(f'room {room_id} is not in rooms')
 
@@ -104,14 +103,8 @@ class Rooms:
         room_id = self._find_customer_room(customer)
         if room_id in self.rooms.keys():
             agent = self.rooms[room_id][1]
-            logger.info(f'customer is {agent}!!!!')
-            msg = {
-                'type': 'message',
-                'body': {
-                    'message': message['body']['message'],
-                    'room_id': room_id}
-            }
-            text_msg = json.dumps(msg)
-            async_to_sync(agent.send(text_data=text_msg))
+            logger.info(f'agent is {agent}!!!!')
+            message['body']['room_id'] = room_id
+            async_to_sync(agent.send(text_data=json.dumps(message)))
         else:
             logger.info(f'room {room_id} is not in rooms')
