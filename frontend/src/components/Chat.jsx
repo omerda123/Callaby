@@ -19,7 +19,7 @@ export default function Chat(props) {
                 {
                     messages
                         ? messages.map((message, i) => (<Message key={i} content={message} author="sender" />))
-                        : <div> You are here alone </div>
+                        : <div> You are here alone :( </div>
                 }
                 {}
 

@@ -63,6 +63,8 @@ export default class ChatController extends Component {
                 waitingMessages[data.body.room_id] = 0
                 chats[data.body.room_id] = []
                 this.setState({chats , waitingMessages})
+                if (Object.keys(chats).length === 1)
+                    this.setState({activeChat: room_id})
             }
             if (data.type === "message"){
                 chats[room_id].push(data.body.message)

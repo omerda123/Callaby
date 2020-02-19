@@ -9,7 +9,7 @@ export default function Tabs(props) {
         <div className="tabs">
             {
                 chats.map((chat, i) => (
-                    <div className="tab" id={chat} onClick={(e) => toggleChat(e)}>
+                    <div className="tab" key={i} id={chat} onClick={(e) => toggleChat(e)}>
                         {chat}
                         {
                             waitingMessages[chat] === 0

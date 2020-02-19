@@ -1,27 +1,18 @@
 import React from 'react';
+import Product from './Product';
 
 export default function ProductList(props) {
     return (
         <div className="products-list">
             {
-                props.products.map((product, index) => (
-                    <>
-                        <div className="product" key={index}>
-                            <div className="product-pic">
-                                <img src={product.image_url} alt={product.image_alt} className="product-image" />
-                            </div>
-                            <div className="product-details">
-                                <div>
-                                    {product.name}
-                                    {' '}
-                                </div>
-                                <div>
-                                    {product.price}
-$
-                                </div>
-                            </div>
-                        </div>
-                    </>
+                props.products.map((product, i) => (
+                    <Product
+                      key={i}
+                      name={product.name}
+                      imageUrl={product.imageUrl}
+                      imageAlt={product.imageAlt}
+                      price={product.price}
+                    />
                 ))
             }
         </div>

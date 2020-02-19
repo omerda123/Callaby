@@ -1,13 +1,13 @@
 [
     {
-        "image_url": "https://whichnespresso.com/wp-content/uploads/home.png",
-        "img_alt":"lattisima",
+        "imageUrl": "https://whichnespresso.com/wp-content/uploads/home.png",
+        "imageAlt":"lattisima",
         "name": "Lattisima",
         "price": 100
     },
     {
-        "image_url": "https://whichnespresso.com/wp-content/uploads/home.png",
-        "img_alt":"lattisima",
+        "imageUrl": "https://whichnespresso.com/wp-content/uploads/home.png",
+        "imageAlt":"lattisima",
         "name": "Lattisima",
         "price": 100
     }
