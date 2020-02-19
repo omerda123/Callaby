@@ -14,22 +14,20 @@ class Login(LoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            print("aaaaaaaaaaaaaaaaaaaaa" ,self.request.user.adminuser.role.id)
+            print("aaaaaaaaaaaaaaaaaaaaa", self.request.user.adminuser.role.id)
             if (self.request.user.adminuser.role.id == 1):
                 return redirect(reverse('chat:index'))
             else:
-                return  redirect(reverse('chat:admin'))
+                return redirect(reverse('chat:admin'))
         return super().dispatch(request, *args, **kwargs)
 
 
 @login_required(login_url="/")
-def chat(request):
-    return render(request, 'chat/room.html', {})
-
-
-@login_required(login_url="/")
 def index(request):
-    return render(request, 'chat/index.html')
+    if request.user.adminuser.role.id == 2:
+        return redirect(reverse('chat:admin'))
+    else:
+        return render(request, 'chat/index.html')
 
 
 @login_required(login_url="/")
@@ -37,5 +35,9 @@ def who_am_i(request):
     serializer = UserSerializer(request.user, context={'request': request})
     return JsonResponse(serializer.data)
 
+
 def admin(request):
-    return render(request, 'myadmin/index.html')
+    if request.user.adminuser.role.id == 1:
+        return redirect(reverse('chat:agent'))
+    else:
+        return render(request, 'myadmin/index.html')

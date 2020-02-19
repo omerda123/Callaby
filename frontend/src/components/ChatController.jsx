@@ -12,13 +12,15 @@ export default class ChatController extends Component {
 
         this.state = {
             chats: {},
-            activeChat: '200',
+            waitingMessages: {},
             chatInput: '',
         };
     }
 
     toggleChat(e){
-        this.setState({activeChat: e.target.innerHTML})
+        const waitingMessages = {...this.state.waitingMessages}
+        waitingMessages[e.target.id] = 0
+        this.setState({activeChat: e.target.id , waitingMessages})
     }
 
     handleChange(e) {
@@ -54,14 +56,22 @@ export default class ChatController extends Component {
         this.chatSocket.onmessage = (e) => {
             const data = JSON.parse(e.data);
             console.log(`data: ${data}`);
+            const chats = {...this.state.chats}
+            const waitingMessages = {...this.state.waitingMessages}
+            const room_id = parseInt(data.body.room_id);
             if (data.type === "connect"){
-                const chats = {...this.state.chats}
+                waitingMessages[data.body.room_id] = 0
                 chats[data.body.room_id] = []
-                this.setState({chats:chats})
+                this.setState({chats , waitingMessages})
             }
             if (data.type === "message"){
-                const chats = {...this.state.chats}
-                chats[data.body.room_id].push(data.body.message)
+                chats[room_id].push(data.body.message)
+                waitingMessages[room_id] +=1;
+                this.setState({chats:chats, waitingMessages})
+            }
+            if (data.type === "disconnect"){
+                delete chats[room_id]
+                delete waitingMessages[room_id]
                 this.setState({chats:chats})
             }
         }
@@ -76,11 +86,15 @@ export default class ChatController extends Component {
     render() {
         const { chats } = this.state;
         const {activeChat} = this.state;
+        const {waitingMessages} = this.state;
 
 
         return (
             <>
-                <Tabs chats={Object.keys(chats)} toggleChat={(e)=> this.toggleChat(e)} />
+                <Tabs 
+                chats={Object.keys(chats)} 
+                toggleChat={(e)=> this.toggleChat(e)} 
+                waitingMessages={waitingMessages} />
                 <Chat 
                     messages={chats[activeChat]} 
                     handleChange={(e) => this.handleChange(e)} 

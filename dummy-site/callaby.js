@@ -1,10 +1,7 @@
-
-let socket = null
-
 const sendMessage = (e) => {
     if (e.code === 'Enter') {
         let message = chatInput.value;
-        socket.send(JSON.stringify({
+        window.chatSocket.send(JSON.stringify({
             type: 'customer_message',
             body: {
                 'message': message,
@@ -17,46 +14,40 @@ const sendMessage = (e) => {
     }
 }
 
-
-const handleSocket = ()=>{
-    
-    const chatSocket = new WebSocket('ws://localhost:8000/ws/chat/')
+const initSocket = ()=>{
+    window.chatSocket = new WebSocket('ws://localhost:8000/ws/chat/')
+    window.chatSocket.onmessage = handleMessage;
+    window.chatSocket.onclose = handleClose;
     chatSocket.onopen = function (e) {
         console.log(e)
     }
     
 }
 
+const handleClose = (e) =>{
+    console.error('Chat socket closed unexpectedly');
+}
+
+const handleMessage = (e)=>{
+    let data = JSON.parse(e.data);
+        console.log(data)
+        if (data['type'] === 'message') {
+            let message = data['body']['message'];
+            let chatBubble = document.createElement("div")
+            chatBubble.innerHTML = message
+            chatBox.appendChild(chatBubble)
+        } else {
+            console.log(`wrong message from web socket: ${data}`)
+        }
+}
 
 const toggleChat = () => {
-    if (socket == null)
-        socket = handleSocket()
+    initSocket()
     if (chat.classList.contains('hidden'))
         chat.classList.remove('hidden')
     else
         chat.classList.add('hidden')
 }
-
-socket.onmessage = function (e) {
-    if (document.querySelector("#no-members"))
-        document.querySelector("#no-members").remove();
-    let data = JSON.parse(e.data);
-    console.log(data)
-    if (data['type'] === 'message') {
-        let message = data['body']['message'];
-        let chatBubble = document.createElement("div")
-        chatBubble.innerHTML = message
-        chatBox.appendChild(chatBubble)
-    } else {
-        console.log(`wrong message from web socket: ${data}`)
-    }
-
-    };
-
-socket.onclose = function (e) {
-    console.error('Chat socket closed unexpectedly');
-};
-
 
 
 

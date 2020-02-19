@@ -14,7 +14,6 @@ rooms = rooms.Rooms()
 
 
 class ChatConsumer(WebsocketConsumer):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         logger.info(f"new consumer: {self.groups}")

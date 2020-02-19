@@ -35,8 +35,15 @@ class Rooms:
     def customer_disconnect(self, customer):
         room = self._find_customer_room(customer)
         if room is not None:
+            message = {
+                'type': 'disconnect',
+                'body': {'room_id': room}
+            }
+            text_msg = json.dumps(message)
+            async_to_sync(self.rooms[room][1].send(text_data=text_msg))
             self._delete_room(room)
         self._match()
+
 
     def _match(self):
         logger.info('try to match customer to agent')
@@ -58,6 +65,7 @@ class Rooms:
         self.room_id += 1
         room_id = self.room_id
         self.rooms[room_id] = [customer, agent]
+        self.customers_queue.remove(customer)
         logger.info(f" rooms : {self.rooms}")
         message = {
             'type': 'connect',
@@ -76,12 +84,9 @@ class Rooms:
         return None
 
     def _delete_room(self, room_id):
-        self.rooms[room_id].agent.user.adminuser.active_chats -= 1
+        self.rooms[room_id][1].user.adminuser.active_chats -= 1
         del self.rooms[room_id]
-        message = {
-            'type': 'disconnect',
-            'body': {'room_id': room_id}
-        }
+
 
     def send_msg_to_customer(self, message):
         logger.info(f"send message to customer {message}")
