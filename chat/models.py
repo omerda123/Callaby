@@ -10,7 +10,7 @@ class Message(models.Model):
     timestamp = models.TimeField(auto_now=True)
 
 
-class Roles(models.Model):
+class Role(models.Model):
     title = models.CharField(max_length=200)
 
 
@@ -21,7 +21,7 @@ class Enterprise(models.Model):
 class AdminUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     active_chats = models.IntegerField(default=0)
-    role = models.ForeignKey(Roles, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
     enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
 
 

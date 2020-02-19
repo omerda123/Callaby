@@ -4,11 +4,6 @@ import React, { useState, useEffect } from "react";
 export default function Enterprises(props) {
 
     const [enterprises, setEnterprises] = useState({enterprises:[]});
-
-
-
-
-
     useEffect(() => {
         fetch("/api/enterprises/")
         .then(enterprises => enterprises.json())
@@ -16,7 +11,7 @@ export default function Enterprises(props) {
         .then(enterprises => setEnterprises( {enterprises }))
         console.log((enterprises));
         
-    } , [enterprises])
+    } , [])
     console.log((enterprises.enterprises));
 
 

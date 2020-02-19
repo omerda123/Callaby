@@ -1,52 +1,66 @@
+
+let socket = null
+
 const sendMessage = (e) => {
     if (e.code === 'Enter') {
-        message = chatInput.value;
-        chatSocket.send(JSON.stringify({
-            type: "message",
-            body: message
+        let message = chatInput.value;
+        socket.send(JSON.stringify({
+            type: 'customer_message',
+            body: {
+                'message': message,
+            }
         }));
+        let chatBubble = document.createElement("div")
+        chatBubble.innerHTML = message
+        chatBox.appendChild(chatBubble)
         chatInput.value = '';
     }
 }
 
 
+const handleSocket = ()=>{
+    
+    const chatSocket = new WebSocket('ws://localhost:8000/ws/chat/')
+    chatSocket.onopen = function (e) {
+        console.log(e)
+    }
+    
+}
+
+
 const toggleChat = () => {
+    if (socket == null)
+        socket = handleSocket()
     if (chat.classList.contains('hidden'))
         chat.classList.remove('hidden')
     else
         chat.classList.add('hidden')
 }
 
-
-const chatSocket = new WebSocket(
-    'ws://localhost:8000' +
-    '/ws/chat/');
-
-chatSocket.onopen = function (e) {
-    console.log(e)
-}
-
-chatSocket.onmessage = function (e) {
+socket.onmessage = function (e) {
     if (document.querySelector("#no-members"))
         document.querySelector("#no-members").remove();
     let data = JSON.parse(e.data);
     console.log(data)
     if (data['type'] === 'message') {
-
         let message = data['body']['message'];
         let chatBubble = document.createElement("div")
         chatBubble.innerHTML = message
         chatBox.appendChild(chatBubble)
-    }
-    else{
+    } else {
         console.log(`wrong message from web socket: ${data}`)
     }
 
-};
+    };
 
-chatSocket.onclose = function (e) {
+socket.onclose = function (e) {
     console.error('Chat socket closed unexpectedly');
 };
+
+
+
+
+/*  <---------------- DOM ---------------->  */
 
 
 const callaby = document.querySelector('#callaby');

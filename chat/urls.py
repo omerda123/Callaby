@@ -8,7 +8,8 @@ app_name = "chat"
 
 urlpatterns = [
     path('', views.Login.as_view(), name='login'),
-    path('chat/', views.index , name='index'),
+    path('agent/' , views.index, name="index"),
+    path('admin/', views.admin, name='admin'),
     path('django-chat/', views.chat, name='room'),
     path('whoami/', views.who_am_i),
 ]

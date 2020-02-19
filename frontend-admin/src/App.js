@@ -75,7 +75,7 @@ function ResponsiveDrawer(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {['Home', 'Enterprises', 'Agents', 'Reports'].map((text, index) => (
+        {['Home', 'Enterprises', 'Agents','rooms', 'Reports'].map((text, index) => (
            <Link to={'/' + text}>
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>

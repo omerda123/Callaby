@@ -16,7 +16,12 @@ export default function Chat(props) {
     return (
         <div>
             <div className="chat-box">
-                {messages.map((message, i) => (<Message key={i} content={message} author="sender" />))}
+                {
+                    messages
+                        ? messages.map((message, i) => (<Message key={i} content={message} author="sender" />))
+                        : <div> You are here alone </div>
+                }
+                {}
 
                 <div className="dummy" ref={(el) => { mesRef = el; }} />
             </div>

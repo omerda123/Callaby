@@ -14,7 +14,11 @@ class Login(LoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            return redirect(reverse('chat:index'))
+            print("aaaaaaaaaaaaaaaaaaaaa" ,self.request.user.adminuser.role.id)
+            if (self.request.user.adminuser.role.id == 1):
+                return redirect(reverse('chat:index'))
+            else:
+                return  redirect(reverse('chat:admin'))
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -32,3 +36,6 @@ def index(request):
 def who_am_i(request):
     serializer = UserSerializer(request.user, context={'request': request})
     return JsonResponse(serializer.data)
+
+def admin(request):
+    return render(request, 'myadmin/index.html')

@@ -1,5 +1,6 @@
 {
   "name": "frontend-admin",
+  "homepage": "http://localhost:8000/admin/",
   "proxy": "http://localhost:8000/",
   "version": "0.1.0",
   "private": true,

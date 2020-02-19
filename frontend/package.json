@@ -1,6 +1,6 @@
 {
   "name": "mycollab-dev",
-  "#homepage": "http://localhost:8000",
+  "homepage": "http://localhost:8000/agent/",
   "proxy": "http://localhost:8000",
   "version": "0.1.0",
   "private": true,

@@ -11,10 +11,7 @@ export default class ChatController extends Component {
         this.chatSocket = new WebSocket(`${wsUrl}`);
 
         this.state = {
-            chats: {
-                '200': ['chat100'],
-                '201': ['chat101'],
-            },
+            chats: {},
             activeChat: '200',
             chatInput: '',
         };
@@ -57,9 +54,14 @@ export default class ChatController extends Component {
         this.chatSocket.onmessage = (e) => {
             const data = JSON.parse(e.data);
             console.log(`data: ${data}`);
-            if (data.type == "connect"){
+            if (data.type === "connect"){
                 const chats = {...this.state.chats}
                 chats[data.body.room_id] = []
+                this.setState({chats:chats})
+            }
+            if (data.type === "message"){
+                const chats = {...this.state.chats}
+                chats[data.body.room_id].push(data.body.message)
                 this.setState({chats:chats})
             }
         }

@@ -69,22 +69,44 @@ class Rooms:
         async_to_sync(agent.send(text_data=text_msg))
 
     def _find_customer_room(self, customer):
+        logger.info(f"looking for {customer}")
         for room, participants in self.rooms.items():
             if customer in participants:
                 return room
         return None
 
     def _delete_room(self, room_id):
-        self.rooms[room_id].agent.adminuser.active_chats -= 1
+        self.rooms[room_id].agent.user.adminuser.active_chats -= 1
         del self.rooms[room_id]
         message = {
             'type': 'disconnect',
             'body': {'room_id': room_id}
         }
 
-    def send_msg(self, message):
+    def send_msg_to_customer(self, message):
         logger.info(f"send message to customer {message}")
-        customer = self.rooms[int(message['body']['room_id'])][0]
-        logger.info(f'customer is {customer}!!!!')
-        text_msg = json.dumps(message)
-        async_to_sync(customer.send(text_data=text_msg))
+        room_id = int(message['body']['room_id'])
+        if room_id in self.rooms.keys():
+            customer = self.rooms[room_id][0]
+            logger.info(f'customer is {customer}!!!!')
+            text_msg = json.dumps(message)
+            async_to_sync(customer.send(text_data=text_msg))
+        else:
+            logger.info(f'room {room_id} is not in rooms')
+
+    def send_msg_to_agent(self, customer, message):
+        logger.info(f"send message to agent {message}")
+        room_id = self._find_customer_room(customer)
+        if room_id in self.rooms.keys():
+            agent = self.rooms[room_id][1]
+            logger.info(f'customer is {agent}!!!!')
+            msg = {
+                'type': 'message',
+                'body': {
+                    'message': message['body']['message'],
+                    'room_id': room_id}
+            }
+            text_msg = json.dumps(msg)
+            async_to_sync(agent.send(text_data=text_msg))
+        else:
+            logger.info(f'room {room_id} is not in rooms')
