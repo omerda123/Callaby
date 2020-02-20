@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Chat from './Chat';
 import Tabs from './Tabs';
 
+
 const wsUrl = 'ws://localhost:8000/ws/chat/';
 
 
@@ -39,6 +40,7 @@ export default class ChatController extends Component {
      this.chatSocket.send(JSON.stringify(msg));
     }
     
+
 
     handleKeyUp = (e) =>{
         if (e.key === 'Enter') {
@@ -90,6 +92,20 @@ export default class ChatController extends Component {
         this.chatSocket.close();
         this.chatSocket = null
         }
+
+    sendProduct(product){
+        console.log(product);
+        const msg = {
+            'type': 'send_product',
+            'body': {
+                'room_id': this.state.activeChat,
+                'name': product.name,
+                'price':product.price,
+                'image': product.imageUrl
+            }
+        }
+        this.chatSocket.send(JSON.stringify(msg));
+    }
     
 
     render() {
@@ -97,6 +113,8 @@ export default class ChatController extends Component {
         const {activeChat} = this.state;
         const {waitingMessages} = this.state;
         const { customers } = this.state;
+
+
 
         return (
             <>
@@ -110,7 +128,7 @@ export default class ChatController extends Component {
                     handleChange={(e) => this.handleChange(e)} 
                     handleKeyUp={this.handleKeyUp} 
                     chatInput = {this.state.chatInput}
-                />
+                />                
             </>
         );
     }

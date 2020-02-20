@@ -44,6 +44,8 @@ class ChatConsumer(WebsocketConsumer):
             rooms.send_msg_to_customer(text_data_json)
             #save to db
             # models.Message.objects.create(chat_id=self.room_name,agent='agent_name',customer='customer',message=message)
+        elif type == 'send_product':
+            rooms.send_msg_to_customer(text_data_json)
         elif type == 'customer_name':
             rooms.send_msg_to_agent(self,text_data_json)
         else:

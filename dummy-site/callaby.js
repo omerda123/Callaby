@@ -51,6 +51,17 @@ const handleMessage = (e)=>{
         } else {
             console.log(`wrong message from web socket: ${data}`)
         }
+        if (data['type'] == 'send_product'){
+            let message = `I recommend you to buy ${data['body']['name']}!! \n it cost ${data['body']['price']}$`;
+            let chatBubble = document.createElement("div")
+            let image = document.createElement('img')
+            image.style.width = '60px';
+            image.style.height = '60px';
+            image.src = data['body']['image'];
+            chatBubble.innerHTML = message
+            chatBox.appendChild(chatBubble)
+            chatBox.appendChild(image)
+        }
 }
 
 const toggleChat = () => {

@@ -12,6 +12,7 @@ export default function ProductList(props) {
                       imageUrl={product.imageUrl}
                       imageAlt={product.imageAlt}
                       price={product.price}
+                      onClick={() => props.onProductChange(product)}
                     />
                 ))
             }

@@ -6,30 +6,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{% static 'static/css/main.3af55dd5.chunk.css' %}" rel="stylesheet">
+    <link href="{% static 'style/style.css' %}" rel="stylesheet">
     <title>Document</title>
 </head>
 
 <body>
+<div id="root">
     <div class="container">
         <div class="login-wrapper">
             <div class="login-form">
-                <div className="login-logo">
+                <div class="login-logo">
                     <h1>Callaby</h1>
                 </div>
-                <div> <h2>USER LOGIN</h2></div>
-                <form method="post">
+                <div><h2>USER LOGIN</h2></div>
+                <form method="post" class="form">
                     {% csrf_token %}
                     {% for field in form %}
                         {{ field }}
                     {% endfor %}
-                    <button className="login-submit">log in</button>
 
+                    <button class="login-submit">log in</button>
                 </form>
             </div>
         </div>
     </div>
-
+</div>
 </body>
 
 </html>

@@ -9,11 +9,11 @@ export default function Main() {
             amount: 2,
         },
         {
-            label: 'Logged in agents',
+            label: 'Configured enterprises',
             amount: 2,
         },
         {
-            label: 'Logged in agents',
+            label: 'Active sessions',
             amount: 2,
         },
         {

@@ -14,9 +14,8 @@ class Login(LoginView):
 
     def dispatch(self, request, *args, **kwargs):
         if self.request.user.is_authenticated:
-            print("aaaaaaaaaaaaaaaaaaaaa", self.request.user.adminuser.role.id)
             if (self.request.user.adminuser.role.id == 1):
-                return redirect(reverse('chat:index'))
+                return redirect(reverse('chat:agent'))
             else:
                 return redirect(reverse('chat:admin'))
         return super().dispatch(request, *args, **kwargs)
@@ -25,7 +24,7 @@ class Login(LoginView):
 @login_required(login_url="/")
 def index(request):
     if request.user.adminuser.role.id == 2:
-        return redirect(reverse('chat:admin'))
+        return redirect(reverse('chat:agent'))
     else:
         return render(request, 'chat/index.html')
 

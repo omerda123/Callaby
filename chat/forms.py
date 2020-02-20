@@ -5,7 +5,8 @@ from django.contrib.auth.forms import UsernameField, AuthenticationForm as af
 class AuthenticationForm(af):
     def __init__(self, request=None, *args, **kwargs):
         super().__init__(request=None, *args, **kwargs)
-        self.fields['username'].widget.attrs['placeholder'] = 'xxxxx'
+        self.fields['username'].widget.attrs['placeholder'] = 'username'
+        self.fields['password'].widget.attrs['placeholder'] = 'password'
 
     # username = UsernameField(widget=forms.TextInput(attrs={'autofocus': True}))
     # password = forms.CharField(

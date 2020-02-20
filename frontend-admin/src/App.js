@@ -25,6 +25,7 @@ import {
 } from "react-router-dom";
 import './Admin.css'
 import Enterprises from './components/Enterprises'
+import Agents from './components/Agents';
 
 const drawerWidth = 240;
 
@@ -162,6 +163,10 @@ function ResponsiveDrawer(props) {
 
           <Route path="/Enterprises">
               <Enterprises/>
+          </Route>
+
+          <Route path="/Agents">
+              <Agents/>
           </Route>
           
        </div>

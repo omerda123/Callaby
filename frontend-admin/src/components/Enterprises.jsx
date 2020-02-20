@@ -16,7 +16,6 @@ export default function Enterprises(props) {
 
 
     return (
-
         <div>
                     {enterprises.enterprises.map(enterprise => <div className="table"> <span> {enterprise.id} </span> <span>{enterprise.name} </span></div>)}
         </div>

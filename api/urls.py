@@ -4,9 +4,11 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
+router.register(r'agents', views.AgentsViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'messages', views.MessageViewSet)
 router.register(r'enterprises', views.EnterpriseViewSet)
+router.register(r'statistics', views.GetStatisticsViewSet, basename="stats")
 
 
 urlpatterns = [
