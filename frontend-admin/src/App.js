@@ -26,6 +26,8 @@ import {
 import './Admin.css'
 import Enterprises from './components/Enterprises'
 import Agents from './components/Agents';
+import Rooms from './components/Rooms'
+import Products from './components/Products';
 
 const drawerWidth = 240;
 
@@ -76,7 +78,7 @@ function ResponsiveDrawer(props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        {['Home', 'Enterprises', 'Agents','rooms', 'Reports'].map((text, index) => (
+        {['Home', 'Enterprises', 'Agents','Products', 'Rooms','Reports'].map((text, index) => (
            <Link to={'/' + text}>
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
@@ -167,6 +169,15 @@ function ResponsiveDrawer(props) {
 
           <Route path="/Agents">
               <Agents/>
+          </Route>
+
+          <Route path="/Products">
+              <Products/>
+          </Route>
+          
+
+          <Route path="/Rooms">
+              <Rooms/>
           </Route>
           
        </div>

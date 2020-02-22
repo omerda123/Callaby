@@ -17,6 +17,7 @@ class Rooms:
         self.customers_queue = []
         self.rooms = {}
         self.room_id = 100
+        self.admins = []
 
     def agent_connect(self, agent):
         self.logged_in_agents.append(agent)
@@ -44,7 +45,6 @@ class Rooms:
             self._delete_room(room)
         self._match()
 
-
     def _match(self):
         logger.info('try to match customer to agent')
         if len(self.logged_in_agents) == 0 or len(self.customers_queue) == 0:
@@ -54,6 +54,7 @@ class Rooms:
             return None
         for customer in self.customers_queue:
             most_available_agent = min(self.logged_in_agents, key=lambda a: a.user.adminuser.active_chats)
+            logger.info(f"**{most_available_agent}**")
             if most_available_agent.user.adminuser.active_chats < MAX_SESSIONS_PER_AGENT:
                 logger.info(f'found agent to customer!! : {most_available_agent}')
                 self._pair(customer, most_available_agent)
@@ -75,9 +76,11 @@ class Rooms:
         logger.info('send connect message to agent')
         async_to_sync(customer.send(text_data=text_msg))
         async_to_sync(agent.send(text_data=text_msg))
+        self.send_notification_to_admin()
 
     def _find_customer_room(self, customer):
         logger.info(f"looking for {customer}")
+        logger.info(self.rooms)
         for room, participants in self.rooms.items():
             if customer in participants:
                 return room
@@ -86,7 +89,6 @@ class Rooms:
     def _delete_room(self, room_id):
         self.rooms[room_id][1].user.adminuser.active_chats -= 1
         del self.rooms[room_id]
-
 
     def send_msg_to_customer(self, message):
         logger.info(f"send message to customer {message}")
@@ -108,3 +110,30 @@ class Rooms:
             async_to_sync(agent.send(text_data=json.dumps(message)))
         else:
             logger.info(f'room {room_id} is not in rooms')
+
+    def admin_subscribe(self, admin):
+        self.admins.append(admin)
+
+    def admin_unsubscribe(self, admin):
+        self.admins.remove(admin)
+
+    def send_notification_to_admin(self):
+        logger.info(f"logged in admins: {self.admins}")
+        new_rooms = self.participants_serializer(self.rooms)
+        if self.admins:
+            for admin in self.admins:
+                message = {
+                    'type': 'admin_stat',
+                    'body': new_rooms
+                }
+                async_to_sync(admin.send(text_data=json.dumps(message)))
+                logging.info(f"send to admin {new_rooms}")
+
+    def participants_serializer(self, rooms):
+        new_rooms = {}
+        for room, participants in rooms.items():
+            logger.info(f"customer {participants[0]} name is {participants[0].customer_name}")
+            new_rooms[room] = [participants[0].customer_name,
+                               participants[1].user.first_name + " " + participants[1].user.last_name]
+            logger.info(f"new rooms: {new_rooms}")
+        return new_rooms

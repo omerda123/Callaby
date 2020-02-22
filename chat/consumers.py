@@ -17,20 +17,28 @@ class ChatConsumer(WebsocketConsumer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         logger.info(f"new consumer: {self.groups}")
+        self.customer_name = ""
 
     def connect(self):
         self.accept()
         self.user = self.scope['user']
         if self.user.id is None:
             rooms.customer_connect(self)
-        else:
+            logger.info('customer!')
+        elif self.user.adminuser.role_id == 1:
             rooms.agent_connect(self)
+            logger.info('agent!')
+        elif self.user.adminuser.role_id == 2:
+            rooms.admin_subscribe(self)
+            logger.info('admin!')
 
     def disconnect(self, close_code):
         if self.user.id is None:
             rooms.customer_disconnect(self)
-        else:
+        elif self.user.adminuser.role_id == 1:
             rooms.agent_disconnect(self)
+        elif self.user.adminuser.role_id == 2:
+            rooms.admin_unsubscribe(self)
 
     def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -39,18 +47,17 @@ class ChatConsumer(WebsocketConsumer):
         if type == 'connect':
             logger.info('--- connect ----')
         elif type == 'customer_message':
-            rooms.send_msg_to_agent(self , text_data_json)
+            rooms.send_msg_to_agent(self, text_data_json)
         elif type == 'message':
             rooms.send_msg_to_customer(text_data_json)
-            #save to db
+            rooms.send_notification_to_admin()
+
+            # save to db
             # models.Message.objects.create(chat_id=self.room_name,agent='agent_name',customer='customer',message=message)
         elif type == 'send_product':
             rooms.send_msg_to_customer(text_data_json)
         elif type == 'customer_name':
-            rooms.send_msg_to_agent(self,text_data_json)
+            rooms.send_msg_to_agent(self, text_data_json)
+            self.customer_name = text_data_json['body']['name']
         else:
             logger.info('------- error --------')
-
-
-
-

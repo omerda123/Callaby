@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from chat import models
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class AdminUserSerializer(serializers.HyperlinkedModelSerializer):
@@ -39,3 +42,14 @@ class EnterpriseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Enterprise
         fields = ['id', 'name']
+    def get_enterprise_name(self):
+        return 'omer'
+
+
+
+class ProductsSerializer(serializers.HyperlinkedModelSerializer):
+    enterprise = EnterpriseSerializer()
+
+    class Meta:
+        model = models.Product
+        fields = ['id', 'enterprise', 'name', 'price', 'image']

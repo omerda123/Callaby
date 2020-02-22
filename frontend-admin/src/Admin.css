@@ -42,16 +42,24 @@
     justify-content: space-evenly;
     width: 100%;
 }
-.table{
+.table-row{
     border:1px solid white;
     font-size: 20px;
     color:white;
     display: flex;
-    justify-content: space-evenly;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    width: 80vw;
 }
 
-.table-td{
-    border:1px solid white;
-    width: 100px;
+.table-col{
+    flex-grow: 1;
+    width: 20%; 
     text-align: center;
-  }
+}
+
+.room{
+    color:white;
+    font-size: 20px;
+}

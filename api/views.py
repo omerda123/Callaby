@@ -2,7 +2,8 @@ from django.contrib.auth.models import User, Group
 from django.http import JsonResponse
 from rest_framework import viewsets, pagination
 from rest_framework.views import APIView
-from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer, EnterpriseSerializer, AgentSerializer
+from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer, EnterpriseSerializer, AgentSerializer, \
+    ProductsSerializer
 from chat import models
 from rest_framework.response import Response
 
@@ -43,6 +44,10 @@ class MessageViewSet(viewsets.ModelViewSet):
 class EnterpriseViewSet(viewsets.ModelViewSet):
     queryset = models.Enterprise.objects.all()
     serializer_class = EnterpriseSerializer
+
+class ProductsViewSet(viewsets.ModelViewSet):
+    queryset = models.Product.objects.all()
+    serializer_class = ProductsSerializer
 
 
 class GetStatisticsViewSet(viewsets.ViewSet):
