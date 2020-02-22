@@ -42,14 +42,17 @@ class EnterpriseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Enterprise
         fields = ['id', 'name']
+
     def get_enterprise_name(self):
         return 'omer'
 
 
-
 class ProductsSerializer(serializers.HyperlinkedModelSerializer):
     enterprise = EnterpriseSerializer()
+    # get_enterprise_name = serializers.SerializerMethodField()
+
 
     class Meta:
         model = models.Product
         fields = ['id', 'enterprise', 'name', 'price', 'image']
+
