@@ -46,7 +46,6 @@ class MessageViewSet(viewsets.ModelViewSet):
 class EnterpriseViewSet(viewsets.ModelViewSet):
     queryset = models.Enterprise.objects.all()
     serializer_class = EnterpriseSerializer
-    permission_classes = (permissions.AllowAny,)
 
 
 class ProductsViewSet(viewsets.ModelViewSet):

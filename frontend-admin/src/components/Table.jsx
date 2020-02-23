@@ -7,17 +7,39 @@ import DjangoCSRFToken from 'django-react-csrftoken';
 
 
 export default function Table({ data, urlSuffix }) {
-    const deleteEnterprise = (id) => {
-        const requestOptions = {
-            method: 'DELETE',
-            redirect: 'follow',
-            'X-CSRF-TOKEN': DjangoCSRFToken,
-        };
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === (`${name}=`)) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 
-        fetch(`/api/${urlSuffix}/${id}/`, requestOptions)
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.log('error', error));
+
+    const csrftoken = getCookie('csrftoken');
+
+    const deleteEnterprise = (id) => {
+        const result = window.confirm('Are you sure you want to delete this item?');
+        if (result) {
+            const requestOptions = {
+                method: 'DELETE',
+                // redirect: 'follow',
+                'X-CSRFToken': csrftoken,
+            };
+
+            fetch(`/api/${urlSuffix}/${id}/`, requestOptions)
+                .then((response) => response.text())
+                .then((result) => console.log(result))
+                .catch((error) => console.log('error', error));
+        }
     };
     return (
         <div className="table">
@@ -40,7 +62,7 @@ export default function Table({ data, urlSuffix }) {
                             );
                         })}
                         <span className="table-col">
-                            <Link to={`${urlSuffix}/${item.id}`}>
+                            <Link to={`/${urlSuffix}/${item.id}`}>
                                 <EditOutlinedIcon />
                             </Link>
                             <DeleteOutlineOutlinedIcon onClick={() => deleteEnterprise(item.id)} />
@@ -48,7 +70,9 @@ export default function Table({ data, urlSuffix }) {
                     </div>
                 ))
             }
-            <AddCircleOutlineOutlinedIcon />
+            <Link to={`/${urlSuffix}/add/`}>
+                <AddCircleOutlineOutlinedIcon />
+            </Link>
         </div>
     );
 }

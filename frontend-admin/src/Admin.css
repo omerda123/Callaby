@@ -76,3 +76,9 @@
     font-size: 20px;
     margin: 10px;
 }
+
+.admin-content .MuiSvgIcon-root{
+    color:white;
+    margin: 5px;
+    cursor: pointer;
+}
