@@ -6,6 +6,8 @@ from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer,
     ProductsSerializer
 from chat import models
 from rest_framework.response import Response
+from rest_framework import permissions
+
 
 
 class LargeResultsSetPagination(pagination.PageNumberPagination):
@@ -44,6 +46,8 @@ class MessageViewSet(viewsets.ModelViewSet):
 class EnterpriseViewSet(viewsets.ModelViewSet):
     queryset = models.Enterprise.objects.all()
     serializer_class = EnterpriseSerializer
+    permission_classes = (permissions.AllowAny,)
+
 
 class ProductsViewSet(viewsets.ModelViewSet):
     queryset = models.Product.objects.all()

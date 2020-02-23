@@ -11,7 +11,6 @@ router.register(r'enterprises', views.EnterpriseViewSet)
 router.register(r'products', views.ProductsViewSet)
 router.register(r'statistics', views.GetStatisticsViewSet, basename="stats")
 
-
 urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
