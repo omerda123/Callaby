@@ -31,6 +31,7 @@ export default class ChatController extends Component {
         e.target.classList.add('active')
         this.props.setActiveChat(e.target.id)
         this.setState({waitingMessages})
+        document.getElementById("chat-message-input").disabled = false;
     }
 
     handleChange(e) {
