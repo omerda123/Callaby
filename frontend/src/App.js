@@ -1,12 +1,10 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/jsx-filename-extension */
 import React, { Component } from 'react';
-import AgentHome from './components/AgentHome';
 import './App.css';
 import products from './Data/products';
 import AgentStatus from './components/AgentStatus';
 import Details from './components/Details';
-import Chat from './components/Chat';
 import Carusel from './components/Carousel';
 import ChatController from './components/ChatController';
 
@@ -15,9 +13,20 @@ export default class App extends Component {
         super();
         this.state = {
             user: null,
+            customers: {},
+            activeChat : '',
         };
         this.chatRef = React.createRef();
     }
+
+
+    tick() {
+        const customers = { ...this.state.customers}
+        let time = new Date( Date.now() - Date.parse(customers[this.state.activeChat]['startTime']))
+        let format_time  = time.getMinutes()+":"+time.getSeconds();
+        customers[this.state.activeChat]['timer'] = format_time
+        this.setState({customers});
+      }
 
     // eslint-disable-next-line camelcase
     UNSAFE_componentWillMount() {
@@ -31,6 +40,27 @@ export default class App extends Component {
         this.setState((state) => ({ loggedIn: !state.loggedIn }));
     }
 
+    setActiveChat = (room_id) =>{
+        this.setState({activeChat: room_id})
+    }
+
+    setCustomer = (action, room_id, customer_name = null) =>{
+        const customers = { ...this.state.customers };
+        if (action === 'delete') {
+            delete customers[room_id];
+        }
+        if (action === 'add') {
+            customers[room_id] = {
+                name:customer_name,
+                startTime: new Date()
+            };
+            this.timerID = setInterval(
+                () => this.tick(),
+                1000
+              );
+        }
+        this.setState({ customers });
+    }
 
     render() {
         return (
@@ -40,10 +70,18 @@ export default class App extends Component {
                 <div className="agent-home">
                     <div className="left">
                         <AgentStatus user={this.state.user} />
-                        <Details />
+                        <Details 
+                        customers={this.state.customers}
+                        activeChat = {this.state.activeChat} />
                     </div>
                     <div className="center">
-                        <ChatController ref={this.chatRef} />
+                        <ChatController 
+                        ref={this.chatRef} 
+                        customers={this.state.customers} 
+                        setCustomer={this.setCustomer} 
+                        setActiveChat = {this.setActiveChat}
+                        activeChat = {this.state.activeChat}
+                        />
                     </div>
                     <div className="right">
                         <a href="/accounts/logout/">logout</a>

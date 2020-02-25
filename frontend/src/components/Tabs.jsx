@@ -11,7 +11,7 @@ export default function Tabs(props) {
             {
                 chats.map((chat, i) => (
                     <div className="tab" key={i} id={chat} onClick={(e) => toggleChat(e)}>
-                        {customers[chat]}
+                        {customers[chat] !== undefined ? customers[chat].name : null}
                         {
                             waitingMessages[chat] === 0
                                 ? null

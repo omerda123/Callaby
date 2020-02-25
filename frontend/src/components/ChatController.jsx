@@ -10,12 +10,11 @@ export default class ChatController extends Component {
     constructor(props) {
         super(props);
         this.chatSocket = new WebSocket(`${wsUrl}`);
-
+        
         this.state = {
             chats: {},
             waitingMessages: {},
             chatInput: '',
-            customers: {},
             formInput: {},
             active: 'chat'
         };
@@ -28,7 +27,10 @@ export default class ChatController extends Component {
     toggleChat(e){
         const waitingMessages = {...this.state.waitingMessages}
         waitingMessages[e.target.id] = 0
-        this.setState({activeChat: e.target.id , waitingMessages})
+        Array.from(document.querySelectorAll('.tab')).map(t => t.classList.remove('active'))
+        e.target.classList.add('active')
+        this.props.setActiveChat(e.target.id)
+        this.setState({waitingMessages})
     }
 
     handleChange(e) {
@@ -40,7 +42,7 @@ export default class ChatController extends Component {
                     'type': 'message',
                     'body': {
                         'message': this.state.chatInput,
-                        'room_id': this.state.activeChat
+                        'room_id': this.props.activeChat
                     }
      }
      this.chatSocket.send(JSON.stringify(msg));
@@ -50,8 +52,7 @@ export default class ChatController extends Component {
 
     handleKeyUp = (e) =>{
         if (e.key === 'Enter') {
-            console.log(this.state.chats[this.state.activeChat]);
-            this.state.chats[this.state.activeChat].push(this.state.chatInput);
+            this.state.chats[this.props.activeChat].push(this.state.chatInput);
             this.sendMessage ()
             this.setState({chatInput:''})
         }
@@ -68,13 +69,12 @@ export default class ChatController extends Component {
             const chats = {...this.state.chats}
             const waitingMessages = {...this.state.waitingMessages}
             const room_id = parseInt(data.body.room_id);
-            const customers ={...this.state.customers}
             if (data.type === "connect"){
                 waitingMessages[data.body.room_id] = 0
                 chats[data.body.room_id] = []
                 this.setState({chats , waitingMessages})
                 if (Object.keys(chats).length === 1)
-                    this.setState({activeChat: room_id})
+                    this.props.setActiveChat(room_id)
             }
             if (data.type === "customer_message"){
                 chats[room_id].push(data.body.message)
@@ -84,12 +84,11 @@ export default class ChatController extends Component {
             if (data.type === "disconnect"){
                 delete chats[room_id]
                 delete waitingMessages[room_id]
-                delete customers[room_id]
+                this.props.setCustomer('delete', room_id)
                 this.setState({chats:chats})
             }
             if (data.type === "customer_name"){
-                customers[room_id] = data.body.name
-                this.setState({customers})
+                this.props.setCustomer('add', room_id,data.body.name )
             }
         }
         
@@ -104,7 +103,7 @@ export default class ChatController extends Component {
         const msg = {
             'type': 'send_product',
             'body': {
-                'room_id': this.state.activeChat,
+                'room_id': this.props.activeChat,
                 'name': product.name,
                 'price':product.price,
                 'image': product.imageUrl
@@ -114,11 +113,11 @@ export default class ChatController extends Component {
     }
 
     sendFormToWS(){       
-        const formData = {... this.state.formInput}
+        const formData = {...this.state.formInput}
         const msg = {
             'type': 'form_data',
             'body': {
-                'room_id': this.state.activeChat,
+                'room_id': this.props.activeChat,
                 'form-data': formData,
             }
         }
@@ -131,7 +130,7 @@ export default class ChatController extends Component {
             'type': 'start_form',
             'body': {
                 'form-fields': e,
-                'room_id': this.state.activeChat,
+                'room_id': this.props.activeChat,
             }
         }
         this.chatSocket.send(JSON.stringify(msg));
@@ -140,7 +139,7 @@ export default class ChatController extends Component {
     
     formInputHandle = (e,field) =>{
         clearTimeout(this.timeout)
-        const temp = { ... this.state.formInput }
+        const temp = { ...this.state.formInput }
         temp[field] = e.target.value;
         this.setState({formInput: temp})
         this.timeout = setTimeout(() => this.sendFormToWS() , 500);        
@@ -148,10 +147,10 @@ export default class ChatController extends Component {
 
     render() {
         const { chats } = this.state;
-        const {activeChat} = this.state;
         const {waitingMessages} = this.state;
-        const { customers } = this.state;
-    
+        const { customers } = this.props;
+        const {activeChat} = this.props;
+
         
 
 

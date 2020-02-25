@@ -15,7 +15,7 @@ export default function FormList(props) {
         <div>
             {
                 forms.map((form) => (
-                    <div onClick={() => props.onFormPress(form.id)}>
+                    <div onClick={() => props.onFormPress(form.id)} key={form.id} className = "form-list-item">
                         {form.name}
                     </div>
                 ))
