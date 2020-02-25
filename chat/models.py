@@ -42,7 +42,7 @@ class Product(models.Model):
     enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE , null=True)
     name = models.CharField(max_length=200)
     price = models.IntegerField()
-    image = models.ImageField(upload_to="static/uploads")
+    image = models.ImageField(upload_to="products/")
 
 
 class Form(models.Model):

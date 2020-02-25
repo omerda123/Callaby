@@ -26,6 +26,7 @@
   width: 20%;
   padding: 20px;
   min-width: 250px;
+
 }
 
 .center {
@@ -165,6 +166,19 @@
 
 .tab.active {
   opacity: 1;
+}
+.logout{
+  display: flex;
+  justify-content: flex-end;
+}
+.logout a{
+  color:white;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+}
+.carousel span{
+  cursor: pointer;
 }
 
 .tab-badge {

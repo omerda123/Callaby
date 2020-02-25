@@ -44,20 +44,15 @@ class FormsSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['id', 'name', 'fields']
 
 
-class EnterpriseSerializer(serializers.HyperlinkedModelSerializer):
+class EnterpriseSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Enterprise
         fields = ['id', 'name']
 
-    def get_enterprise_name(self):
-        return 'omer'
 
-
-class ProductsSerializer(serializers.HyperlinkedModelSerializer):
-    enterprise = EnterpriseSerializer()
-
-    # get_enterprise_name = serializers.SerializerMethodField()
-
+class ProductsSerializer(serializers.ModelSerializer):
+    # enterprise = EnterpriseSerializer()
+    # e_name = serializers.CharField(required=False, allow_null=True)
     class Meta:
         model = models.Product
         fields = ['id', 'enterprise', 'name', 'price', 'image']

@@ -44,7 +44,7 @@ export default class App extends Component {
         this.setState({activeChat: room_id})
     }
 
-    setCustomer = (action, room_id, customer_name = null) =>{
+    setCustomer = (action, room_id, customer_name = null , skill=null) =>{
         const customers = { ...this.state.customers };
         if (action === 'delete') {
             delete customers[room_id];
@@ -52,6 +52,7 @@ export default class App extends Component {
         if (action === 'add') {
             customers[room_id] = {
                 name:customer_name,
+                skill : skill,
                 startTime: new Date()
             };
             this.timerID = setInterval(
@@ -84,7 +85,7 @@ export default class App extends Component {
                         />
                     </div>
                     <div className="right">
-                        <a href="/accounts/logout/">logout</a>
+                        <div class="logout"><a href="/accounts/logout/">Logout</a></div>
                         <Carusel products={products} onProductChange={(p) => this.chatRef.current.sendProduct(p)} onFormPress={(f) => this.chatRef.current.startForm(f)} />
 
                     </div>

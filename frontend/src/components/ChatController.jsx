@@ -88,7 +88,8 @@ export default class ChatController extends Component {
                 this.setState({chats:chats})
             }
             if (data.type === "customer_name"){
-                this.props.setCustomer('add', room_id,data.body.name )
+                console.log(data.body)
+                this.props.setCustomer('add', room_id, data.body.name ,data.body.skill )
             }
         }
         

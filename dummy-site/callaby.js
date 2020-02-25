@@ -19,6 +19,7 @@ const sendName = (e) =>{
         type: 'customer_name',
         body: {
             'name': message,
+            'skill': 'Coffee machine'
         }
     }));
     nameDiv.classList.add('hidden')

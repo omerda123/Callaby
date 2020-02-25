@@ -37,6 +37,6 @@ def who_am_i(request):
 
 def admin(request):
     if request.user.adminuser.role.id == 1:
-        return redirect(reverse('chat:agent'))
+        return redirect(reverse('chat:agent')   )
     else:
         return render(request, 'myadmin/index.html')

@@ -42,7 +42,7 @@ export default function Edit() {
         }
         formdata.append('name', enterprise.name);
         formdata.append('price', 123);
-        formdata.append('enterprise', 'Nespresso');
+        formdata.append('enterprise', 13);
 
         const requestOptions = {
             method: 'POST',

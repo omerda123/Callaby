@@ -26,7 +26,7 @@ export default function Chat(props) {
                 <div className="dummy" ref={(el) => { mesRef = el; }} />
             </div>
             <div>
-                <input type="text" autoComplete="off" className="chat-input" id="chat-message-input" value={chatInput} onChange={(e) => handleChange(e)} onKeyUp={(e) => handleKeyUp(e)} />
+                <input type="text" autoComplete="off" className="chat-input" id="chat-message-input" value={chatInput} onChange={(e) => handleChange(e)} onKeyUp={(e) => handleKeyUp(e)} disabled />
             </div>
         </div>
     );
