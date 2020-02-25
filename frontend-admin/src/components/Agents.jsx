@@ -13,7 +13,7 @@ export default function Agents(props) {
 
     return (
         <div>
-            <Table data={agents.agents} urlSuffix="Agents" />
+            <Table data={agents.agents} urlSuffix="Agents" urlSuffix="agents"/>
         </div>
     );
 }

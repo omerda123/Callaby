@@ -48,10 +48,8 @@ const handleMessage = (e)=>{
             let chatBubble = document.createElement("div")
             chatBubble.innerHTML = message
             chatBox.appendChild(chatBubble)
-        } else {
-            console.log(`wrong message from web socket: ${data}`)
         }
-        if (data['type'] == 'send_product'){
+        else if (data['type'] == 'send_product'){
             let message = `I recommend you to buy ${data['body']['name']}!! \n it cost ${data['body']['price']}$`;
             let chatBubble = document.createElement("div")
             let image = document.createElement('img')
@@ -61,6 +59,31 @@ const handleMessage = (e)=>{
             chatBubble.innerHTML = message
             chatBox.appendChild(chatBubble)
             chatBox.appendChild(image)
+        }
+        else if (data['type'] == 'start_form'){
+            console.log(data['body']['form-fields'])
+            const formDiv = document.createElement('div');
+            const json_data = JSON.parse(data['body']['form-fields'])
+            json_data.map( item =>{
+                const input = document.createElement('input');
+                input.type = item.type;
+                input.id = item.label;
+                input.placeholder = item.label;
+                formDiv.appendChild(input)
+            })
+            chatDiv.appendChild(formDiv)
+        }
+        else if (data['type'] == 'form_data'){
+            const json_data = data['body']['form-data']
+            Object.keys(json_data).map(key =>{
+                console.log(key)
+                const input = document.getElementById(`${key}`);
+                console.log(input);
+                input.value = json_data[key]
+            })
+        }
+        else {
+            console.log(`wrong message from web socket: ${data}`)
         }
 }
 

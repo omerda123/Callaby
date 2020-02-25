@@ -4,6 +4,7 @@ import Table from './Table';
 
 export default function Enterprises(props) {
     const [enterprises, setEnterprises] = useState({ enterprises: [] });
+
     useEffect(() => {
         fetch('/api/enterprises/')
             .then((enterprises) => enterprises.json())

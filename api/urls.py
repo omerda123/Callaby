@@ -9,6 +9,7 @@ router.register(r'groups', views.GroupViewSet)
 router.register(r'messages', views.MessageViewSet)
 router.register(r'enterprises', views.EnterpriseViewSet)
 router.register(r'products', views.ProductsViewSet)
+router.register(r'forms', views.FormsViewSet)
 router.register(r'statistics', views.GetStatisticsViewSet, basename="stats")
 
 urlpatterns = [

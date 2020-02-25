@@ -169,19 +169,16 @@ function ResponsiveDrawer(props) {
                             <Enterprises />
                         </Route>
 
-                        <Route exact path="/Enterprises/:id(\d+)" component={Edit} />
-                        <Route exact path="/Enterprises/:add([a-z]+)" component={Add} />
+                        <Route exact path="/:datasource([a-z]+)/:id(\d+)" component={Edit} />
+                        <Route exact path="/:datasource([a-z]+)/:add([a-z]+)" component={Add} />
 
 
                         <Route exact path="/Agents">
                             <Agents />
                         </Route>
 
-                        <Route exact path="/Agents/:id">
-                            <Edit />
-                        </Route>
 
-                        <Route path="/Products">
+                        <Route exact path="/Products">
                             <Products />
                         </Route>
 

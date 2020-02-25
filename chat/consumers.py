@@ -51,10 +51,16 @@ class ChatConsumer(WebsocketConsumer):
         elif type == 'message':
             rooms.send_msg_to_customer(text_data_json)
             rooms.send_notification_to_admin()
-
             # save to db
             # models.Message.objects.create(chat_id=self.room_name,agent='agent_name',customer='customer',message=message)
         elif type == 'send_product':
+            rooms.send_msg_to_customer(text_data_json)
+        elif type == 'start_form':
+            form_fields = models.Form.objects.get(id=text_data_json['body']['form-fields']).fields
+            text_data_json['body']['form-fields'] = json.dumps(form_fields)
+            logger.info(text_data_json)
+            rooms.send_msg_to_customer(text_data_json)
+        elif type == 'form_data':
             rooms.send_msg_to_customer(text_data_json)
         elif type == 'customer_name':
             rooms.send_msg_to_agent(self, text_data_json)

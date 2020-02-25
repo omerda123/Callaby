@@ -5,10 +5,11 @@ import DjangoCSRFToken from 'django-react-csrftoken';
 
 export default function Edit() {
     const { id } = useParams();
+    const { datasource } = useParams();
 
     const [enterprise, setEnterprise] = useState({});
     useEffect(() => {
-        fetch(`/api/enterprises/${id}`)
+        fetch(`/api/${datasource}/${id}`)
             .then((enterprise) => enterprise.json())
             .then((enterprise) => setEnterprise(enterprise));
     }, []);

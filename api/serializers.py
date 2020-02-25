@@ -38,6 +38,12 @@ class ChatMessageSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['chat_id', 'agent', 'customer', 'message', 'timestamp']
 
 
+class FormsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Form
+        fields = ['id', 'name', 'fields']
+
+
 class EnterpriseSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Enterprise
@@ -49,10 +55,9 @@ class EnterpriseSerializer(serializers.HyperlinkedModelSerializer):
 
 class ProductsSerializer(serializers.HyperlinkedModelSerializer):
     enterprise = EnterpriseSerializer()
-    # get_enterprise_name = serializers.SerializerMethodField()
 
+    # get_enterprise_name = serializers.SerializerMethodField()
 
     class Meta:
         model = models.Product
         fields = ['id', 'enterprise', 'name', 'price', 'image']
-

@@ -17,7 +17,6 @@ export default class App extends Component {
             user: null,
         };
         this.chatRef = React.createRef();
-
     }
 
     // eslint-disable-next-line camelcase
@@ -31,7 +30,6 @@ export default class App extends Component {
     toggleLogin() {
         this.setState((state) => ({ loggedIn: !state.loggedIn }));
     }
-
 
 
     render() {
@@ -49,7 +47,7 @@ export default class App extends Component {
                     </div>
                     <div className="right">
                         <a href="/accounts/logout/">logout</a>
-                        <Carusel products={products} onProductChange={(p) => this.chatRef.current.sendProduct(p)} />
+                        <Carusel products={products} onProductChange={(p) => this.chatRef.current.sendProduct(p)} onFormPress={(f) => this.chatRef.current.startForm(f)} />
 
                     </div>
                 </div>

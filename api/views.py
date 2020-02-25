@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework import viewsets, pagination
 from rest_framework.views import APIView
 from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer, EnterpriseSerializer, AgentSerializer, \
-    ProductsSerializer
+    ProductsSerializer , FormsSerializer
 from chat import models
 from rest_framework.response import Response
 from rest_framework import permissions
@@ -51,6 +51,11 @@ class EnterpriseViewSet(viewsets.ModelViewSet):
 class ProductsViewSet(viewsets.ModelViewSet):
     queryset = models.Product.objects.all()
     serializer_class = ProductsSerializer
+
+
+class FormsViewSet(viewsets.ModelViewSet):
+    queryset = models.Form.objects.all()
+    serializer_class = FormsSerializer
 
 
 class GetStatisticsViewSet(viewsets.ViewSet):

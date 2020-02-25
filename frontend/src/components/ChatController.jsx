@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Chat from './Chat';
 import Tabs from './Tabs';
-
+import Form from './Form'
 
 const wsUrl = 'ws://localhost:8000/ws/chat/';
 
@@ -15,9 +15,15 @@ export default class ChatController extends Component {
             chats: {},
             waitingMessages: {},
             chatInput: '',
-            customers: {}
+            customers: {},
+            formInput: {},
+            active: 'chat'
         };
+
+        this.timeout = null
+
     }
+
 
     toggleChat(e){
         const waitingMessages = {...this.state.waitingMessages}
@@ -106,13 +112,47 @@ export default class ChatController extends Component {
         }
         this.chatSocket.send(JSON.stringify(msg));
     }
+
+    sendFormToWS(){       
+        const formData = {... this.state.formInput}
+        const msg = {
+            'type': 'form_data',
+            'body': {
+                'room_id': this.state.activeChat,
+                'form-data': formData,
+            }
+        }
+        this.chatSocket.send(JSON.stringify(msg));
+    }
+
+    startForm(e){
+        console.log(e);
+        const msg = {
+            'type': 'start_form',
+            'body': {
+                'form-fields': e,
+                'room_id': this.state.activeChat,
+            }
+        }
+        this.chatSocket.send(JSON.stringify(msg));
+        this.setState({active:"form"})
+    }
     
+    formInputHandle = (e,field) =>{
+        clearTimeout(this.timeout)
+        const temp = { ... this.state.formInput }
+        temp[field] = e.target.value;
+        this.setState({formInput: temp})
+        this.timeout = setTimeout(() => this.sendFormToWS() , 500);        
+    }
 
     render() {
         const { chats } = this.state;
         const {activeChat} = this.state;
         const {waitingMessages} = this.state;
         const { customers } = this.state;
+    
+        
 
 
 
@@ -123,12 +163,22 @@ export default class ChatController extends Component {
                 customers = {customers}
                 toggleChat={(e)=> this.toggleChat(e)} 
                 waitingMessages={waitingMessages} />
-                <Chat 
+
+                {
+                    this.state.active === 'chat'?
+                    <Chat 
                     messages={chats[activeChat]} 
                     handleChange={(e) => this.handleChange(e)} 
                     handleKeyUp={this.handleKeyUp} 
                     chatInput = {this.state.chatInput}
-                />                
+                />         :
+
+                <Form formInputHandle={this.formInputHandle} />
+                    
+                }
+
+
+       
             </>
         );
     }

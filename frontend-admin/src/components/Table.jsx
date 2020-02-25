@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@material-ui/icons/DeleteOutlineOutlined';
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
@@ -56,7 +56,7 @@ export default function Table({ data, urlSuffix }) {
                                     </span>
                                 );
                             } return (
-                                <span className="table-col">
+                                <span className="table-col" style={{ width: (100 / data.length) }}>
                                     {item[key]}
                                 </span>
                             );

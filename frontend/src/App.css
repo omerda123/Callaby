@@ -171,3 +171,20 @@
   color:white
 }
 
+.form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color:white;
+  font-size: 20px;
+}
+
+.form-row{
+  margin: 10px;
+}
+
+.form-col{
+  margin: 10px;
+}
