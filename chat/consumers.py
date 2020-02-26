@@ -3,6 +3,7 @@ from channels.generic.websocket import WebsocketConsumer
 import json
 import logging
 from . import models
+
 from . import rooms
 
 logging.basicConfig(
@@ -51,8 +52,6 @@ class ChatConsumer(WebsocketConsumer):
         elif type == 'message':
             rooms.send_msg_to_customer(text_data_json)
             rooms.send_notification_to_admin()
-            # save to db
-            # models.Message.objects.create(chat_id=self.room_name,agent='agent_name',customer='customer',message=message)
         elif type == 'send_product':
             rooms.send_msg_to_customer(text_data_json)
         elif type == 'start_form':

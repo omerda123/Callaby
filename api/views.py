@@ -1,13 +1,17 @@
 from django.contrib.auth.models import User, Group
 from django.http import JsonResponse
 from rest_framework import viewsets, pagination
-from rest_framework.views import APIView
 from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer, EnterpriseSerializer, AgentSerializer, \
-    ProductsSerializer , FormsSerializer
+    ProductsSerializer, FormsSerializer
 from chat import models
-from rest_framework.response import Response
-from rest_framework import permissions
+import logging
+import json
 
+logging.basicConfig(
+    format='[%(levelname)s %(asctime)s %(module)s:%(lineno)d] %(message)s', level=logging.INFO)
+
+logger = logging.getLogger(__name__)
+from datetime import datetime
 
 
 class LargeResultsSetPagination(pagination.PageNumberPagination):
@@ -38,7 +42,7 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 class MessageViewSet(viewsets.ModelViewSet):
-    queryset = models.Message.objects.filter(chat_id='room1')
+    queryset = models.Message.objects.all()
     serializer_class = ChatMessageSerializer
     pagination_class = LargeResultsSetPagination
 
@@ -62,5 +66,17 @@ class GetStatisticsViewSet(viewsets.ViewSet):
     def list(self, request, format=None):
         number_Of_enterprises = len(models.Enterprise.objects.all())
         number_Of_agents = len(User.objects.all())
-        data = {'number_Of_agents': number_Of_agents, 'number_Of_enterprises':number_Of_enterprises}
+        data = {'number_Of_agents': number_Of_agents, 'number_Of_enterprises': number_Of_enterprises}
+        return JsonResponse(data)
+
+
+class GetLastSevenDays(viewsets.ViewSet):
+    def list(self, request, format=None):
+        today = len(models.Chat.objects.filter(date_created__day=datetime.today().day))
+        todayMinusOne = len(models.Chat.objects.filter(date_created__day=datetime.today().day - 1))
+        todayMinusTwo = len(models.Chat.objects.filter(date_created__day=datetime.today().day - 2))
+        todayMinusThree = len(models.Chat.objects.filter(date_created__day=datetime.today().day - 3))
+        todayMinusFour = len(models.Chat.objects.filter(date_created__day=datetime.today().day - 4))
+        data = {'today': today, 'today-1': todayMinusOne, 'today-2': todayMinusTwo, 'today-3': todayMinusThree,
+                'today-4': todayMinusFour, }
         return JsonResponse(data)

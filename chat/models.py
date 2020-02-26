@@ -1,22 +1,31 @@
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django.contrib.auth.models import User
-
-
-class Message(models.Model):
-    chat_id = models.CharField(max_length=200)
-    agent = models.CharField(max_length=200)
-    customer = models.CharField(max_length=200, null=True)
-    message = models.TextField()
-    timestamp = models.TimeField(auto_now=True)
-
-
-class Role(models.Model):
-    title = models.CharField(max_length=200)
+from django.utils.timezone import now
 
 
 class Enterprise(models.Model):
     name = models.CharField(max_length=200)
+
+
+class Chat(models.Model):
+    uid = models.CharField(max_length=20)
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.CharField(max_length=30)
+    date_created = models.DateTimeField(default=now)
+
+
+class Message(models.Model):
+    chat_id = models.ForeignKey(Chat, on_delete=models.CASCADE)
+    agent = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer = models.CharField(max_length=200, null=True)
+    author = models.CharField(max_length=200)
+    message = models.TextField()
+    timestamp = models.DateTimeField(default=now)
+
+
+class Role(models.Model):
+    title = models.CharField(max_length=200)
 
 
 class AdminUser(models.Model):
@@ -26,20 +35,8 @@ class AdminUser(models.Model):
     enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
 
 
-class Agent(models.Model):
-    enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE)
-    private_name = models.CharField(max_length=200)
-    last_name = models.CharField(max_length=200)
-
-
-class Chat(models.Model):
-    originator = models.CharField(max_length=200)
-    destination = models.CharField(max_length=200)
-    chat_id = models.CharField(max_length=200)
-
-
 class Product(models.Model):
-    enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE , null=True)
+    enterprise = models.ForeignKey(Enterprise, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=200)
     price = models.IntegerField()
     image = models.ImageField(upload_to="products/")

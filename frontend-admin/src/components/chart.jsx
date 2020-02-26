@@ -1,10 +1,25 @@
-import React from 'react'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts'
+import React from 'react';
+import {
+    LineChart, Line, XAxis, YAxis, CartesianGrid,
+} from 'recharts';
 
-const data = [{ name: 'Page A', uv: 200, pv: 2400, amt: 2400 }, { name: 'Page B', uv: 600, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 1500, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 400, pv: 2400, amt: 2400 }, { name: 'Page A', uv: 200, pv: 2400, amt: 2400 },];
 
+export default function chart({ daily }) {
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const now = new Date();
+    const today = now.getDay();
 
-export default function chart() {
+    const data = [{
+        name: weekdays[today - 4], uv: daily['today-4'], pv: 1, amt: 50,
+    }, {
+        name: weekdays[today - 3], uv: daily['today-3'], pv: 2, amt: 50,
+    }, {
+        name: weekdays[today - 2], uv: daily['today-2'], pv: 3, amt: 50,
+    }, {
+        name: weekdays[today - 1], uv: daily['today-1'], pv: 4, amt: 50,
+    }, {
+        name: 'today', uv: daily.today, pv: 5, amt: 50,
+    }];
     return (
         <div>
             <LineChart width={950} height={300} data={data}>
@@ -15,5 +30,5 @@ export default function chart() {
                 <Line type="monotone" dataKey="pv" stroke="#82ca9d" />
             </LineChart>
         </div>
-    )
+    );
 }

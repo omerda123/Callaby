@@ -1,6 +1,9 @@
 import json
 import logging
 from asgiref.sync import async_to_sync
+from . import models
+from django.utils.crypto import get_random_string
+import random
 
 from . import consumers
 
@@ -16,7 +19,6 @@ class Rooms:
         self.logged_in_agents = []
         self.customers_queue = []
         self.rooms = {}
-        self.room_id = 100
         self.admins = []
 
     def agent_connect(self, agent):
@@ -63,8 +65,7 @@ class Rooms:
                 return None
 
     def _pair(self, customer, agent):
-        self.room_id += 1
-        room_id = self.room_id
+        room_id = get_random_string()
         self.rooms[room_id] = [customer, agent]
         self.customers_queue.remove(customer)
         logger.info(f" rooms : {self.rooms}")
@@ -76,6 +77,7 @@ class Rooms:
         logger.info('send connect message to agent')
         async_to_sync(customer.send(text_data=text_msg))
         async_to_sync(agent.send(text_data=text_msg))
+        models.Chat.objects.create(uid=room_id, customer=customer.customer_name, agent=agent.user)
         self.send_notification_to_admin()
 
     def _find_customer_room(self, customer):
@@ -97,6 +99,10 @@ class Rooms:
             customer = self.rooms[room_id][0]
             logger.info(f'customer is {customer}!!!!')
             async_to_sync(customer.send(text_data=json.dumps(message)))
+            if message['type'] == 'message':
+                models.Message.objects.create(chat_id=room_id, agent=self.rooms[room_id][1].user.id,
+                                              customer=self.rooms[room_id][0].user.id,
+                                              message=message['body']['message'])
         else:
             logger.info(f'room {room_id} is not in rooms')
 
@@ -108,6 +114,10 @@ class Rooms:
             logger.info(f'agent is {agent}!!!!')
             message['body']['room_id'] = room_id
             async_to_sync(agent.send(text_data=json.dumps(message)))
+            if message['type'] == 'customer_message':
+                models.Message.objects.create(chat_id=room_id, agent=self.rooms[room_id][1].user.id,
+                                              customer=self.rooms[room_id][0].user.id,
+                                              message=message['body']['message'])
         else:
             logger.info(f'room {room_id} is not in rooms')
 

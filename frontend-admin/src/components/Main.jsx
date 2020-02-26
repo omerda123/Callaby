@@ -1,16 +1,32 @@
-import React from 'react'
-import Widget from './Widget'
-import Chart from './chart'
+import React, { useState, useEffect } from 'react';
+import Widget from './Widget';
+import Chart from './chart';
 
 export default function Main() {
+    const [graphStats, setGraphStats] = useState({});
+    const [stats, setStats] = useState({});
+    useEffect(() => {
+        fetch('/api/statistics/')
+            .then((stat) => stat.json())
+            .then((stat) => setStats(stat));
+
+            fetch('/api/daily/')
+            .then((daily) => daily.json())
+            .then((daily) => setGraphStats(daily));
+        }, []);
+        console.log((stats));
+        console.log((graphStats));
+
+
+
     const data = [
         {
             label: 'Logged in agents',
-            amount: 2,
+            amount: stats.number_Of_agents,
         },
         {
             label: 'Configured enterprises',
-            amount: 2,
+            amount: stats.number_Of_enterprises,
         },
         {
             label: 'Active sessions',
@@ -26,19 +42,15 @@ export default function Main() {
         },
 
 
-
-
-    ]
+    ];
     return (
         <div>
             <div className="widgets-header">
-                {data.map((widget) => {
-                    return (<Widget label={widget.label} amount={widget.amount} />)
-                })}
+                {data.map((widget) => (<Widget label={widget.label} amount={widget.amount} />))}
             </div>
             <div>
-                <Chart></Chart>
+                <Chart daily={graphStats} />
             </div>
-            </div>
-    )
+        </div>
+    );
 }

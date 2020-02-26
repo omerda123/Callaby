@@ -11,6 +11,7 @@ router.register(r'enterprises', views.EnterpriseViewSet)
 router.register(r'products', views.ProductsViewSet)
 router.register(r'forms', views.FormsViewSet)
 router.register(r'statistics', views.GetStatisticsViewSet, basename="stats")
+router.register(r'daily', views.GetLastSevenDays, basename="daily")
 
 urlpatterns = [
     path('', include(router.urls)),

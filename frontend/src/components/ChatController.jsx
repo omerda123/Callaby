@@ -24,6 +24,10 @@ export default class ChatController extends Component {
     }
 
 
+
+
+
+
     toggleChat(e){
         const waitingMessages = {...this.state.waitingMessages}
         waitingMessages[e.target.id] = 0
@@ -59,7 +63,11 @@ export default class ChatController extends Component {
         }
 
     }
+
+
     componentDidMount() {
+
+
         this.chatSocket.onopen = (e) => {
             console.log(e);
         }
@@ -69,7 +77,7 @@ export default class ChatController extends Component {
             console.log(`data: ${data}`);
             const chats = {...this.state.chats}
             const waitingMessages = {...this.state.waitingMessages}
-            const room_id = parseInt(data.body.room_id);
+            const room_id = data.body.room_id;
             if (data.type === "connect"){
                 waitingMessages[data.body.room_id] = 0
                 chats[data.body.room_id] = []
@@ -81,6 +89,7 @@ export default class ChatController extends Component {
                 chats[room_id].push(data.body.message)
                 waitingMessages[room_id] +=1;
                 this.setState({chats , waitingMessages})
+                console.log(this.mesRef)
             }
             if (data.type === "disconnect"){
                 delete chats[room_id]
@@ -168,6 +177,7 @@ export default class ChatController extends Component {
                 {
                     this.state.active === 'chat'?
                     <Chat 
+                    ref={this.mesRef} 
                     messages={chats[activeChat]} 
                     handleChange={(e) => this.handleChange(e)} 
                     handleKeyUp={this.handleKeyUp} 

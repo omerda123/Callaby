@@ -47,6 +47,7 @@ export default class App extends Component {
     setCustomer = (action, room_id, customer_name = null , skill=null) =>{
         const customers = { ...this.state.customers };
         if (action === 'delete') {
+            clearInterval(this.timerID)
             delete customers[room_id];
         }
         if (action === 'add') {
@@ -61,6 +62,10 @@ export default class App extends Component {
               );
         }
         this.setState({ customers });
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerID)
     }
 
     render() {
