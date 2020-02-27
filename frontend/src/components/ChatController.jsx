@@ -85,22 +85,28 @@ export default class ChatController extends Component {
                 if (Object.keys(chats).length === 1)
                     this.props.setActiveChat(room_id)
             }
-            if (data.type === "customer_message"){
+            else if (data.type === "customer_message"){
                 chats[room_id].push({sender: 'customer', text: data.body.message})
                 waitingMessages[room_id] +=1;
                 this.setState({chats , waitingMessages})
                 console.log(this.mesRef)
                 document.getElementById("chat-message-input").disabled = false;
             }
-            if (data.type === "disconnect"){
+            else if (data.type === "disconnect"){
                 delete chats[room_id]
                 delete waitingMessages[room_id]
                 this.props.setCustomer('delete', room_id)
                 this.setState({chats:chats})
             }
-            if (data.type === "customer_name"){
+            else if (data.type === "customer_name"){
                 console.log(data.body)
                 this.props.setCustomer('add', room_id, data.body.name ,data.body.skill )
+            }
+            else if (data.type === "customer_form_data"){
+                console.log(data.body)
+                const formIn = JSON.parse(data.body.form)
+                const res = {...formIn , ...this.state.formInput}
+                this.setState({formInput:res})
             }
         }
         
@@ -183,7 +189,9 @@ export default class ChatController extends Component {
                     handleKeyUp={this.handleKeyUp} 
                     chatInput = {this.state.chatInput}
                     active={this.state.active} 
-                    formInputHandle={this.formInputHandle}/>
+                    formInputHandle={this.formInputHandle}
+                    formInput = {this.state.formInput}
+                    />
                 
 
                 

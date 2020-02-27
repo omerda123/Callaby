@@ -10,6 +10,7 @@ export default function Chat(props) {
     const { handleKeyUp } = props;
     const { chatInput } = props;
     const { active } = props;
+    const {formInput} = props;
     const { formInputHandle } = props;
     const messagesEndRef = useRef(null);
 
@@ -41,7 +42,7 @@ export default function Chat(props) {
                         </div>
                     )
 
-                    : <Form formInputHandle={formInputHandle} />
+                    : <Form formInputHandle={formInputHandle} formInput={formInput}/>
             }
 
 

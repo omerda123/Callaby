@@ -30,6 +30,7 @@ import Rooms from './components/Rooms';
 import Products from './components/Products';
 import Edit from './components/Edit';
 import Add from './components/Add';
+import Reports from './components/Reports';
 
 const drawerWidth = 240;
 
@@ -165,6 +166,10 @@ function ResponsiveDrawer(props) {
                             <Main />
                         </Route>
 
+                        <Route exact path="/">
+                            <Main />
+                        </Route>
+
                         <Route exact path="/Enterprises/">
                             <Enterprises />
                         </Route>
@@ -185,6 +190,10 @@ function ResponsiveDrawer(props) {
 
                         <Route path="/Rooms">
                             <Rooms />
+                        </Route>
+
+                        <Route path="/Reports">
+                            <Reports />
                         </Route>
 
                     </div>

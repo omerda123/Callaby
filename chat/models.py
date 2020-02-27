@@ -46,9 +46,8 @@ class Form(models.Model):
     name = models.CharField(max_length=200, default="")
     fields = JSONField()
 
+
 class Order(models.Model):
     agent = models.ForeignKey(User, on_delete=models.CASCADE)
     order_details = JSONField()
     date_created = models.DateTimeField(default=now)
-
-

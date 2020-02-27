@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Form({ formInputHandle }) {
+export default function Form({ formInput, formInputHandle }) {
     const form = [
         { label: 'Full name', type: 'text' },
         { label: 'Last name', type: 'text' },
@@ -17,7 +17,7 @@ export default function Form({ formInputHandle }) {
                             {field.label}
                         </span>
                         <span className="form-col">
-                            <input type={field.type} placeholder={field.label} onChange={(e) => formInputHandle(e, field.label)} />
+                            <input type={field.type} value={formInput[field.label]} placeholder={field.label} onChange={(e) => formInputHandle(e, field.label)} />
                         </span>
                     </div>
                 ))

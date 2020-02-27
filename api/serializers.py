@@ -61,4 +61,16 @@ class ProductsSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Order
-        fields = ['order_details', 'agent']
+        fields = ['id', 'order_details', 'agent']
+
+
+class ChatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Chat
+        fields = '__all__'
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Message
+        fields = '__all__'

@@ -47,7 +47,7 @@ const submitForm = (e) => {
     const res = {}
     formdata.append("agent", 2);
     const allInputs = document.querySelectorAll(".form input")
-    for (const input of allInputs){
+    for (const input of allInputs) {
         console.log(input)
         res[input.id] = input.value
     }
@@ -78,6 +78,27 @@ const handleClose = (e) => {
     console.error('Chat socket closed unexpectedly');
 }
 
+let timeout = null
+
+const sendFormToWS = (msg) =>{
+    console.log(msg)
+    window.chatSocket.send(JSON.stringify({
+            type: 'customer_form_data',
+            body: {
+                'form': JSON.stringify(msg),
+            }
+        }));
+}
+    const temp = {}
+
+const sendFormData = (e) => {
+    clearTimeout(timeout)
+    temp[e.target.id] = e.target.value;
+    console.log(temp)
+    timeout = setTimeout(() => sendFormToWS(temp), 500);
+
+}
+
 const handleMessage = (e) => {
     let data = JSON.parse(e.data);
     console.log(data)
@@ -104,12 +125,13 @@ const handleMessage = (e) => {
         chatBox.classList.add('hidden')
         chatInput.classList.add('hidden')
         const formDiv = document.createElement('div');
-        formDiv.className="form"
+        formDiv.className = "form"
         const json_data = JSON.parse(data['body']['form-fields'])
         json_data.map(item => {
             const input = document.createElement('input');
             input.type = item.type;
             input.id = item.label;
+            input.addEventListener('keyup', sendFormData)
             input.placeholder = item.label;
             formDiv.appendChild(input)
         })

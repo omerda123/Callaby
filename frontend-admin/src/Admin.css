@@ -82,3 +82,62 @@
     margin: 5px;
     cursor: pointer;
 }
+.index-chat{
+    height:15px;
+    width: 15px;
+    background-color:   rgb(136, 132, 216);
+    ;
+}
+
+.index-orders{
+    height:15px;
+    width: 15px;
+    background-color: rgb(130, 202, 157);
+
+}
+
+.graph-index{
+    width: 40%;
+    display: flex;
+    color:white;
+    font-size: 18px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.report-header{
+    display: flex;
+    color:white;
+
+}
+
+.data-table{
+    height: 70%;
+    width: 100%;
+    color:white;
+}
+
+.reports{
+    width:100%;
+    flex-direction: column;
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: scroll;
+}
+
+.report-header-item{
+    color:black;
+    margin: 15px;
+    background-color: aqua;
+    padding:0 15px;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+
+.table{
+    width: 100%;
+    text-align: center;
+}

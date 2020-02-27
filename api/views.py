@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from django.http import JsonResponse
 from rest_framework import viewsets, pagination
 from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer, EnterpriseSerializer, AgentSerializer, \
-    ProductsSerializer, FormsSerializer, OrderSerializer
+    ProductsSerializer, FormsSerializer, OrderSerializer, ChatSerializer, MessageSerializer
 from chat import models
 import logging
 import json
@@ -65,6 +65,18 @@ class FormsViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = models.Order.objects.all()
     serializer_class = OrderSerializer
+    pagination_class = LargeResultsSetPagination
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = models.Message.objects.all()
+    serializer_class = MessageSerializer
+    pagination_class = LargeResultsSetPagination
+
+
+class ChatViewSet(viewsets.ModelViewSet):
+    queryset = models.Chat.objects.all()
+    serializer_class = ChatSerializer
     pagination_class = LargeResultsSetPagination
 
 

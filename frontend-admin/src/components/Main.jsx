@@ -16,8 +16,7 @@ export default function Main() {
                 .then((order) => order.json()),
         ]).then(([stat, daily , order]) => { setStats(stat); setGraphStats(daily);setOrders(order); });
     }, []);
-    console.log((stats));
-    console.log((graphStats));
+
 
 
     const data = [
@@ -51,6 +50,10 @@ export default function Main() {
             </div>
             <div>
                 <Chart daily={graphStats} orders={orders} />
+            </div>
+            <div className="graph-index">
+                <div className="index-chat"></div> <div>Number of chats</div>
+                <div className="index-orders"></div> <div>Number of orders</div>
             </div>
         </div>
     );
