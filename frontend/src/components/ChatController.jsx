@@ -108,6 +108,11 @@ export default class ChatController extends Component {
                 const res = {...formIn , ...this.state.formInput}
                 this.setState({formInput:res})
             }
+            else if (data.type === 'finish'){
+                console.log("finishhhhhhhhhhh");
+                
+                this.setState({active:'chat'})
+            }
         }
         
     }

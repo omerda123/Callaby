@@ -62,9 +62,11 @@ class ChatConsumer(WebsocketConsumer):
         elif type == 'form_data':
             rooms.send_msg_to_customer(text_data_json)
         elif type == 'customer_form_data':
-            rooms.send_msg_to_agent(self,text_data_json)
+            rooms.send_msg_to_agent(self, text_data_json)
         elif type == 'customer_name':
             self.customer_name = text_data_json['body']['name']
+            rooms.send_msg_to_agent(self, text_data_json)
+        elif type == 'finish':
             rooms.send_msg_to_agent(self, text_data_json)
         else:
             logger.info('------- error --------')

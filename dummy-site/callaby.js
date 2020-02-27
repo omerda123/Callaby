@@ -70,7 +70,12 @@ const submitForm = (e) => {
     thanksDiv.innerHTML = "Thank you for purchasing nespresso machine"
     chatDiv.classList.remove('hidden')
     document.querySelector('.form').classList.add('hidden')
-    chatDiv.appendChild(thanksDiv)
+    chatDiv.appendChild(thanksDiv);
+    window.chatSocket.send(JSON.stringify({
+        type: 'finish',
+        body: {}
+    }));
+    window.chatSocket.close();
 }
 
 const handleClose = (e) => {
