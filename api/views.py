@@ -2,7 +2,7 @@ from django.contrib.auth.models import User, Group
 from django.http import JsonResponse
 from rest_framework import viewsets, pagination
 from .serializers import UserSerializer, GroupSerializer, ChatMessageSerializer, EnterpriseSerializer, AgentSerializer, \
-    ProductsSerializer, FormsSerializer
+    ProductsSerializer, FormsSerializer, OrderSerializer
 from chat import models
 import logging
 import json
@@ -62,6 +62,12 @@ class FormsViewSet(viewsets.ModelViewSet):
     serializer_class = FormsSerializer
 
 
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = models.Order.objects.all()
+    serializer_class = OrderSerializer
+    pagination_class = LargeResultsSetPagination
+
+
 class GetStatisticsViewSet(viewsets.ViewSet):
     def list(self, request, format=None):
         number_Of_enterprises = len(models.Enterprise.objects.all())
@@ -77,6 +83,18 @@ class GetLastSevenDays(viewsets.ViewSet):
         todayMinusTwo = len(models.Chat.objects.filter(date_created__day=datetime.today().day - 2))
         todayMinusThree = len(models.Chat.objects.filter(date_created__day=datetime.today().day - 3))
         todayMinusFour = len(models.Chat.objects.filter(date_created__day=datetime.today().day - 4))
+        data = {'today': today, 'today-1': todayMinusOne, 'today-2': todayMinusTwo, 'today-3': todayMinusThree,
+                'today-4': todayMinusFour, }
+        return JsonResponse(data)
+
+
+class GetLastSevenDaysOrders(viewsets.ViewSet):
+    def list(self, request, format=None):
+        today = len(models.Order.objects.filter(date_created__day=datetime.today().day))
+        todayMinusOne = len(models.Order.objects.filter(date_created__day=datetime.today().day - 1))
+        todayMinusTwo = len(models.Order.objects.filter(date_created__day=datetime.today().day - 2))
+        todayMinusThree = len(models.Order.objects.filter(date_created__day=datetime.today().day - 3))
+        todayMinusFour = len(models.Order.objects.filter(date_created__day=datetime.today().day - 4))
         data = {'today': today, 'today-1': todayMinusOne, 'today-2': todayMinusTwo, 'today-3': todayMinusThree,
                 'today-4': todayMinusFour, }
         return JsonResponse(data)

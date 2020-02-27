@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Chat from './Chat';
 import Tabs from './Tabs';
-import Form from './Form'
 
 const wsUrl = 'ws://localhost:8000/ws/chat/';
 
@@ -29,6 +28,7 @@ export default class ChatController extends Component {
 
 
     toggleChat(e){
+        this.setState({active:'chat'})
         const waitingMessages = {...this.state.waitingMessages}
         waitingMessages[e.target.id] = 0
         Array.from(document.querySelectorAll('.tab')).map(t => t.classList.remove('active'))
@@ -57,7 +57,7 @@ export default class ChatController extends Component {
 
     handleKeyUp = (e) =>{
         if (e.key === 'Enter') {
-            this.state.chats[this.props.activeChat].push(this.state.chatInput);
+            this.state.chats[this.props.activeChat].push({sender: 'agent', text: this.state.chatInput});
             this.sendMessage ()
             this.setState({chatInput:''})
         }
@@ -86,10 +86,11 @@ export default class ChatController extends Component {
                     this.props.setActiveChat(room_id)
             }
             if (data.type === "customer_message"){
-                chats[room_id].push(data.body.message)
+                chats[room_id].push({sender: 'customer', text: data.body.message})
                 waitingMessages[room_id] +=1;
                 this.setState({chats , waitingMessages})
                 console.log(this.mesRef)
+                document.getElementById("chat-message-input").disabled = false;
             }
             if (data.type === "disconnect"){
                 delete chats[room_id]
@@ -117,7 +118,7 @@ export default class ChatController extends Component {
                 'room_id': this.props.activeChat,
                 'name': product.name,
                 'price':product.price,
-                'image': product.imageUrl
+                'image': product.image
             }
         }
         this.chatSocket.send(JSON.stringify(msg));
@@ -167,30 +168,26 @@ export default class ChatController extends Component {
 
 
         return (
-            <>
-                <Tabs 
+<>
+            <Tabs 
                 chats={Object.keys(chats)} 
                 customers = {customers}
                 toggleChat={(e)=> this.toggleChat(e)} 
                 waitingMessages={waitingMessages} />
 
-                {
-                    this.state.active === 'chat'?
+                
                     <Chat 
                     ref={this.mesRef} 
                     messages={chats[activeChat]} 
                     handleChange={(e) => this.handleChange(e)} 
                     handleKeyUp={this.handleKeyUp} 
                     chatInput = {this.state.chatInput}
-                />         :
+                    active={this.state.active} 
+                    formInputHandle={this.formInputHandle}/>
+                
 
-                <Form formInputHandle={this.formInputHandle} />
+                
                     
-                }
-
-
-       
-            </>
-        );
-    }
+       </> );
+}
 }

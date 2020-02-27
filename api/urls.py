@@ -10,8 +10,10 @@ router.register(r'messages', views.MessageViewSet)
 router.register(r'enterprises', views.EnterpriseViewSet)
 router.register(r'products', views.ProductsViewSet)
 router.register(r'forms', views.FormsViewSet)
+router.register(r'order', views.OrderViewSet)
 router.register(r'statistics', views.GetStatisticsViewSet, basename="stats")
 router.register(r'daily', views.GetLastSevenDays, basename="daily")
+router.register(r'daily-orders', views.GetLastSevenDaysOrders, basename="daily")
 
 urlpatterns = [
     path('', include(router.urls)),

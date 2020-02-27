@@ -56,3 +56,9 @@ class ProductsSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Product
         fields = ['id', 'enterprise', 'name', 'price', 'image']
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Order
+        fields = ['order_details', 'agent']

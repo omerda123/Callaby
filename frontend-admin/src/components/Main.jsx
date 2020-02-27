@@ -5,18 +5,19 @@ import Chart from './chart';
 export default function Main() {
     const [graphStats, setGraphStats] = useState({});
     const [stats, setStats] = useState({});
+    const [orders, setOrders] = useState({});
     useEffect(() => {
-        fetch('/api/statistics/')
-            .then((stat) => stat.json())
-            .then((stat) => setStats(stat));
-
+        Promise.all([
+            fetch('/api/statistics/')
+                .then((stat) => stat.json()),
             fetch('/api/daily/')
-            .then((daily) => daily.json())
-            .then((daily) => setGraphStats(daily));
-        }, []);
-        console.log((stats));
-        console.log((graphStats));
-
+                .then((daily) => daily.json()),
+            fetch('/api/daily-orders/')
+                .then((order) => order.json()),
+        ]).then(([stat, daily , order]) => { setStats(stat); setGraphStats(daily);setOrders(order); });
+    }, []);
+    console.log((stats));
+    console.log((graphStats));
 
 
     const data = [
@@ -33,12 +34,12 @@ export default function Main() {
             amount: 2,
         },
         {
-            label: 'Logged in agents',
-            amount: 2,
+            label: 'Daily chats',
+            amount: graphStats.today,
         },
         {
-            label: 'Logged in agents',
-            amount: 2,
+            label: 'Daily orders',
+            amount: orders.today,
         },
 
 
@@ -49,7 +50,7 @@ export default function Main() {
                 {data.map((widget) => (<Widget label={widget.label} amount={widget.amount} />))}
             </div>
             <div>
-                <Chart daily={graphStats} />
+                <Chart daily={graphStats} orders={orders} />
             </div>
         </div>
     );

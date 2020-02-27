@@ -94,14 +94,16 @@ class Rooms:
 
     def send_msg_to_customer(self, message):
         logger.info(f"send message to customer {message}")
-        room_id = int(message['body']['room_id'])
+        room_id = message['body']['room_id']
         if room_id in self.rooms.keys():
             customer = self.rooms[room_id][0]
             logger.info(f'customer is {customer}!!!!')
             async_to_sync(customer.send(text_data=json.dumps(message)))
             if message['type'] == 'message':
-                models.Message.objects.create(chat_id=room_id, agent=self.rooms[room_id][1].user.id,
-                                              customer=self.rooms[room_id][0].user.id,
+                chat = models.Chat.objects.get(uid=room_id)
+                logger.info(chat)
+                models.Message.objects.create(chat_id=chat, agent=self.rooms[room_id][1].user,
+                                              customer=customer.customer_name,
                                               message=message['body']['message'])
         else:
             logger.info(f'room {room_id} is not in rooms')
@@ -115,8 +117,9 @@ class Rooms:
             message['body']['room_id'] = room_id
             async_to_sync(agent.send(text_data=json.dumps(message)))
             if message['type'] == 'customer_message':
-                models.Message.objects.create(chat_id=room_id, agent=self.rooms[room_id][1].user.id,
-                                              customer=self.rooms[room_id][0].user.id,
+                chat = models.Chat.objects.get(uid=room_id)
+                models.Message.objects.create(chat_id=chat, agent=self.rooms[room_id][1].user,
+                                              customer=self.rooms[room_id][0].customer_name,
                                               message=message['body']['message'])
         else:
             logger.info(f'room {room_id} is not in rooms')
